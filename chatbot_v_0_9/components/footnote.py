@@ -1,7 +1,6 @@
 import streamlit as st
 from PIL import Image
 from .utils import get_chatbot_config, get_image_path
-import os 
 from PIL import Image
 
 chatbot_config = get_chatbot_config() 
