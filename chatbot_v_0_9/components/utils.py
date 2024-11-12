@@ -2,21 +2,21 @@ import time
 import streamlit as st
 import json
 import base64
-import os
+from pathlib import Path
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
-    base_dir = os.path.dirname(__file__)
-    return os.path.join(base_dir, "images", image_name)
+
+    file_path = Path(__file__).parent / "images/"+image_name
+    return file_path
 
 def get_chatbot_config():
     """
     Loads and returns the chatbot configuration from a JSON file.
     """
     # Define the absolute path to the JSON file
-    base_dir = os.path.dirname(__file__)  # Directory of the script
-    file_path = os.path.join(base_dir, "components", "chatbot_config_v_0_9.json")
-    
+    file_path = Path(__file__).parent / "components/chatbot_config_v_0_9.json"
+
     # Load the configuration
     with open(file_path, "r") as config_file:
         return json.load(config_file)
