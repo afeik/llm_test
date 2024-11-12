@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from .utils import get_chatbot_config, get_image_path
 from PIL import Image
+from pathlib import Path
 
 chatbot_config = get_chatbot_config() 
 
@@ -11,7 +12,8 @@ def show_impressum():
     Displays the Impressum content in a dialog box by loading 
     and rendering markdown from a file.
     """
-    with open("components/impressum_chatbot.md", "r") as file:
+    file_path = Path(__file__).parent / "impressum_chatbot.md"
+    with open(file_path, "r") as file:
         markdown_content = file.read()
     st.markdown(markdown_content)
 
