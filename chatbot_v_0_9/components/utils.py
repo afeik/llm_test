@@ -7,7 +7,7 @@ from pathlib import Path
 # Function to get the absolute path to the image
 def get_image_path(image_name):
 
-    file_path = Path(__file__).parent / "images/"+image_name
+    file_path = Path(__file__).parent / image_name
     return file_path
 
 def get_chatbot_config():
