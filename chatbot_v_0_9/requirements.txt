@@ -13,3 +13,4 @@ SQLAlchemy==2.0.36
 wordcloud==1.9.4
 datetime
 anthropic==0.39.0
+psycopg2
