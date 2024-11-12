@@ -1,6 +1,9 @@
 import streamlit as st
 from .footnote import write_footnote
 from .db_communication import update_proficiency
+from .utils import get_image_path
+import os 
+from PIL import Image
 
 # Function that queries the experience level of the user regarding the energy transition
 def select_proficiency_level():
@@ -19,7 +22,10 @@ def select_proficiency_level():
     with placeholder.container():
 
         st.markdown("<h2>Welcome to the Energy Transition Chatbot! </h2>", unsafe_allow_html=True)
-        st.image("./images/energy_transition_switzerland.png",use_column_width=True)
+        # Load and display the image
+        image_path = get_image_path("energy_transition_switzerland.png")
+        image = Image.open(image_path)
+        st.image(image, use_column_width=True)
         st.write("How experienced are you with the energy transition? ")
 
         if "proficiency_selected" not in st.session_state:

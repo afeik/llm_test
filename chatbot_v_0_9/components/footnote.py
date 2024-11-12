@@ -1,6 +1,8 @@
 import streamlit as st
 from PIL import Image
-from .utils import get_chatbot_config
+from .utils import get_chatbot_config, get_image_path
+import os 
+from PIL import Image
 
 chatbot_config = get_chatbot_config() 
 
@@ -81,8 +83,10 @@ def write_footnote(short_version=False):
         # Display logos side by side
         col1, col2 = st.columns(2)
         with col1:
-            img1 = Image.open("./images/eth_logo.png").resize((150, 35))
+            img1_path = get_image_path("eth_logo.png")
+            img1 = Image.open(img1_path).resize((150, 35))
             st.image(img1)
         with col2:
-            img2 = Image.open("./images/nccr_logo.png").resize((150, 35))
+            img2_path = get_image_path("eth_logo.png")
+            img2 = Image.open(img2_path).resize((150, 35))
             st.image(img2)
