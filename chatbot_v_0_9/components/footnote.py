@@ -86,6 +86,6 @@ def write_footnote(short_version=False):
             img1 = Image.open(img1_path).resize((150, 35))
             st.image(img1)
         with col2:
-            img2_path = get_image_path("eth_logo.png")
+            img2_path = get_image_path("nccr_logo.png")
             img2 = Image.open(img2_path).resize((150, 35))
             st.image(img2)
