@@ -1,6 +1,6 @@
 import streamlit as st
 from .footnote import write_footnote
-from .db_communication import update_proficiency
+from .db_communication import update_proficiency, init_db_communication
 from .utils import get_image_path
 from PIL import Image
 
@@ -35,6 +35,7 @@ def select_proficiency_level():
                     st.session_state.proficiency_selected = True
                     st.session_state.step = "initial_statement"
                     placeholder.empty()
+                    init_db_communication()
                     update_proficiency()
                     st.rerun()
             with col2:
@@ -43,6 +44,7 @@ def select_proficiency_level():
                     st.session_state.proficiency_selected = True
                     st.session_state.step = "initial_statement"
                     placeholder.empty()
+                    init_db_communication()
                     update_proficiency()
                     st.rerun()
             with col3:
@@ -51,6 +53,7 @@ def select_proficiency_level():
                     st.session_state.proficiency_selected = True
                     st.session_state.step = "initial_statement"
                     placeholder.empty()
+                    init_db_communication()
                     update_proficiency()
                     st.rerun()
         

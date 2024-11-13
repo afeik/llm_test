@@ -9,14 +9,10 @@ from components.ai_conversation import claude_conversation
 from components.footnote import write_footnote
 from components.user_summary import get_user_statement_and_summary
 from components.utils import set_background_color
-from components.db_communication import init_db_communication
 
 # Initialize Claude client
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
-
-# Initialize Database Enty 
-init_db_communication()
 
 # Change background color to dark petrol (ETH Color)
 set_background_color("#00596D")
