@@ -9,7 +9,7 @@
                 "summary_role": "Summarize the user's statement factually, capturing their main concern or question while identifying potential misunderstandings. Make sure to just use at max two concise sentences and no additional overhead.  Just summarize, use a neutral perspective without mentioning the user and do not clarify.",
                 "conversation_role": "Act as a supportive and patient guide in the realm of energy transition topics, using straightforward, friendly language. Prioritize clarity over technical depth, focusing on core concepts in an accessible way. Provide analogies, relatable examples, and simplify complex ideas. Address misunderstandings gently by focusing on building a foundational understanding of the Swiss energy system, why the transition is needed, and what it entails.",
                 "summary_max_tokens": 100,
-                "conversation_max_tokens": 250,
+                "conversation_max_tokens": 350,
                 "summary_temperature": 0.7,
                 "conversation_temperature": 0.8
     },
@@ -19,7 +19,7 @@
             "summary_role": "Summarize the user's main concerns or questions factually, while identifying specific areas where they seek clarity or have misconceptions. Make sure to just use at max two concise sentences and no additional overhead.  Just summarize, use a neutral perspective without mentioning the user and do not clarify.",
             "conversation_role": "Act as an informed assistant, offering moderate technical detail to expand the user’s understanding of energy transition topics. Explain concepts using a structured approach, providing Swiss-specific examples where relevant. Address factual misunderstandings directly, while highlighting Switzerland's unique challenges and goals within the energy transition. Foster reasoning by encouraging users to evaluate their own views step-by-step.",
             "summary_max_tokens": 120,
-            "conversation_max_tokens": 300,
+            "conversation_max_tokens": 350,
             "summary_temperature": 0.7,
             "conversation_temperature": 0.8
         },
