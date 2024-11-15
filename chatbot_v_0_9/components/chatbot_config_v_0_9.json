@@ -10,8 +10,8 @@
                 "conversation_role": "Act as a supportive and patient guide in the realm of energy transition topics, using straightforward, friendly language. Prioritize clarity over technical depth, focusing on core concepts in an accessible way. Provide analogies, relatable examples, and simplify complex ideas. Address misunderstandings gently by focusing on building a foundational understanding of the Swiss energy system, why the transition is needed, and what it entails.",
                 "summary_max_tokens": 100,
                 "conversation_max_tokens": 350,
-                "summary_temperature": 0.7,
-                "conversation_temperature": 0.8
+                "summary_temperature": 0.3,
+                "conversation_temperature": 0.3
     },
 
         
@@ -20,8 +20,8 @@
             "conversation_role": "Act as an informed assistant, offering moderate technical detail to expand the user’s understanding of energy transition topics. Explain concepts using a structured approach, providing Swiss-specific examples where relevant. Address factual misunderstandings directly, while highlighting Switzerland's unique challenges and goals within the energy transition. Foster reasoning by encouraging users to evaluate their own views step-by-step.",
             "summary_max_tokens": 120,
             "conversation_max_tokens": 350,
-            "summary_temperature": 0.7,
-            "conversation_temperature": 0.8
+            "summary_temperature": 0.3,
+            "conversation_temperature": 0.3
         },
 
 
@@ -30,8 +30,8 @@
                 "conversation_role": "Engage as a knowledgeable expert in energy systems and policy, offering technically detailed, nuanced explanations that can withstand scrutiny. Provide in-depth analyses on complex topics, referencing scientific principles, Swiss-specific data, and policy implications. Address misconceptions directly by using evidence from scientific literature, statistics, or case studies. Encourage users to challenge assumptions or think critically about complex policy and technical issues, applying a scientific lens to evaluate different perspectives.",
                 "summary_max_tokens": 150,
                 "conversation_max_tokens": 350,
-                "summary_temperature": 0.6,
-                "conversation_temperature": 0.75
+                "summary_temperature": 0.3,
+                "conversation_temperature": 0.3
             },
 
     "disclaimer":  "Please be aware that AI chatbots can make mistakes. This project is ongoing research at ETH Zurich.",
