@@ -12,6 +12,17 @@ def show_impressum():
     Displays the Impressum content in a dialog box by loading 
     and rendering markdown from a file.
     """
+    # Display logos side by side
+    # col1, col2 = st.columns(2)
+    # with col1:
+    #     img1_path = get_image_path("eth_logo.png")
+    #     img1 = Image.open(img1_path).resize((150, 35))
+    #     st.image(img1)
+    # with col2:
+    #     img2_path = get_image_path("nccr_logo.png")
+    #     img2 = Image.open(img2_path).resize((150, 35))
+    #     st.image(img2)
+
     file_path = Path(__file__).parent / "impressum_chatbot.md"
     with open(file_path, "r") as file:
         markdown_content = file.read()
@@ -81,13 +92,4 @@ def write_footnote(short_version=False):
             show_impressum()
         st.markdown(f"</p>", unsafe_allow_html=True)
 
-        # Display logos side by side
-        col1, col2 = st.columns(2)
-        with col1:
-            img1_path = get_image_path("eth_logo.png")
-            img1 = Image.open(img1_path).resize((150, 35))
-            st.image(img1)
-        with col2:
-            img2_path = get_image_path("nccr_logo.png")
-            img2 = Image.open(img2_path).resize((150, 35))
-            st.image(img2)
+        
