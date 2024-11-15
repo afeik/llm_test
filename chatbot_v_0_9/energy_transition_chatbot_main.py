@@ -15,7 +15,7 @@ anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
 
 # Change background color to dark petrol (ETH Color)
-set_background_color("#FFFFFF")
+set_background_color("#000000")
 
 ### Main App Flow ### 
 if "step" not in st.session_state:
