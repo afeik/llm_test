@@ -98,7 +98,7 @@ def get_user_statement_and_summary(client):
                         "summary_temperature"
                     ],
                 )
-
+                placeholder.empty()
                 summary = summary_response.content[0].text.strip()
                 insert_db_message(
                     statement, role="user", message_type="initial_statement"
@@ -110,8 +110,9 @@ def get_user_statement_and_summary(client):
                 st.session_state.summary = summary
                 st.session_state.statement = statement
                 st.session_state.step = "initial_rating"
+                
                 st.rerun()
-                placeholder.empty()
+                
 
     write_footnote()
 
