@@ -1,9 +1,11 @@
 import streamlit as st
-from .utils import stream_data, get_chatbot_config
+import gettext
+from .utils import stream_data, get_chatbot_config,language_dropdown
 from .footnote import write_footnote
 from .db_communication import insert_db_message
 
 chatbot_config = get_chatbot_config()
+
 
 # Step 3: Conduct Clarifying Conversation with Claude
 def claude_conversation(client):
@@ -33,57 +35,29 @@ def claude_conversation(client):
         - Appends the response from Claude to the conversation display and database.
     - Handles the conversation's end by switching to the final rating state.
     """
-
-    with st.container(border=False):
-        col1, col2 = st.columns([2, 1])
-        with col1:
-            st.markdown("<h3 style='text-align: center;'>Let's talk about the Energy Transition!</h3>", unsafe_allow_html=True)
-        with col2:
-                    # CSS to style the button, hide unnecessary elements, and set a uniform font size
-            st.markdown(
-                """
-                <style>
-                /* Hide specific elements */
-                .element-container:has(style) {
-                    display: none;
-                }
-                #button-after {
-                    display: none;
-                }
-                .element-container:has(#button-after) {
-                    display: none;
-                }
-                
-                /* Style the button with a smaller font size */
-                .element-container:has(#button-after) + div button {
-                    background-color: transparent;
-                    color: gray;
-                    border: none;
-                    padding: 0;
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-            st.markdown(f"<p style='font-size:0.8em !important;'>", unsafe_allow_html=True)
-
-            # Invisible span to target the button
-            st.markdown('<span id="button-after"> </span>', unsafe_allow_html=True)
-            
-            if st.button("End Conversation", key="end_conversation", help="End the conversation"):
-                st.session_state.step = "final_rating"
-                st.rerun()
-            st.markdown(f"</p>", unsafe_allow_html=True)
+    _, col = language_dropdown(ret_cols = True)
+    # Add end conversation button in the upper right corner
+    with col: 
+        if st.button(_("End Conversation"), key="end_conversation"):
+            st.session_state.step = "final_rating"
+            st.rerun()
     
+    if st.session_state.lang == "de":
+        disclaimer = chatbot_config["disclaimer_de"]
+    else:
+        disclaimer = chatbot_config["disclaimer_en"]
+
     # Top bar with "End Conversation" button aligned to the top right
-    with st.container(height=500, border=False):
+    with st.container(height=620, border=False):
 
         # Initialize conversation and track message turns
         if "conversation_turns" not in st.session_state:
             st.session_state.conversation_turns = 0
             st.session_state.messages = []
+        if st.session_state.lang == "de":
+            lang_prompt = "Use German"
+        else: 
+            lang_prompt = "Use English"
 
         # Start the conversation with a clarification prompt if it's the first turn
         if st.session_state.conversation_turns == 0 and "initial_clarification_sent" not in st.session_state:
@@ -93,7 +67,7 @@ def claude_conversation(client):
                 model="claude-3-5-sonnet-20241022",
                 max_tokens=chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
                 temperature=chatbot_config[st.session_state.proficiency]["conversation_temperature"],
-                system = chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
+                system = lang_prompt + chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
                 messages=[{"role": "user", "content": [{"type": "text", "text": initial_clarification_prompt}]}],
             )
             
@@ -104,7 +78,7 @@ def claude_conversation(client):
             # Insert to DB 
             insert_db_message(initial_clarification, role = "assistant", message_type = "initial_clarification")
 
-        disp_messages = st.container(height=400,border=False)
+        disp_messages = st.container(height=520,border=False)
 
        # Display chat messages in sequence
         with disp_messages:
@@ -112,10 +86,18 @@ def claude_conversation(client):
                 with st.chat_message(message["role"]):
                     st.write(message["content"])
 
-        # User input at the bottom of the chat
-        prompt = st.chat_input("Your response:")
 
-        # Process user input
+        st.markdown(
+            f"""
+            <div style='color: gray; font-size: 13px'>
+                {disclaimer}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )        # User input at the bottom of the chat
+        prompt = st.chat_input(_("Your response:"))
+
+
         if prompt:
             with disp_messages:
                 with st.chat_message("user"):
@@ -136,7 +118,7 @@ def claude_conversation(client):
                 model="claude-3-5-sonnet-20241022",
                 max_tokens= chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
                 temperature= chatbot_config[st.session_state.proficiency]["conversation_temperature"],
-                system = chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
+                system = lang_prompt + chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
                 messages=[
                     {"role": "assistant", "content": str(all_prev_messages)},
                     {"role": "user", "content": prompt}
@@ -155,4 +137,4 @@ def claude_conversation(client):
             st.session_state.messages.append({"role": "assistant", "content": response_text})  
             st.session_state.conversation_turns += 1
 
-    write_footnote()
+    write_footnote(short_version=True)

@@ -18,7 +18,8 @@ def init_db_communication():
         result = session.execute(
             insert(conversations).values(
                 start_time=datetime.now(),
-                chatbot_version=chatbot_config["version"]
+                chatbot_version=chatbot_config["version"],
+                usecase=chatbot_config["usecase"]
             )
         )
         st.session_state.conversation_id = result.inserted_primary_key[0]

@@ -4,8 +4,8 @@ import json
 import base64
 import os
 from pathlib import Path
+import gettext
 
-# Function to get the absolute path to the image
 # Function to get the absolute path to the image
 def get_image_path(image_name):
     base_dir = os.path.dirname(__file__)
@@ -85,3 +85,43 @@ def set_background_local(image_file):
         """,
         unsafe_allow_html=True
     )
+
+
+def language_dropdown(ret_cols=False): 
+    # Directory for language files
+    
+    locale_dir = st.session_state.locale_dir
+
+    # Map language codes to display names
+    languages = {
+        "de": "DE 🇩🇪",
+        "en": "EN 🇬🇧",
+    }
+
+    # Streamlit Layout: Use columns to place the dropdown on the right
+    if ret_cols is False:
+        col1, col2, col3 = st.columns([6,3,1.8])  # Adjust column ratios for layout control
+
+        with col3:
+            selected_language = st.selectbox(" ", list(languages.values()), label_visibility="collapsed")
+    else:
+        col1, col2, col3 = st.columns([6,1.8,3])
+        with col2: 
+            selected_language = st.selectbox(" ", list(languages.values()), label_visibility="collapsed")
+    
+    # Get the corresponding locale code
+    current_lang = [code for code, name in languages.items() if name == selected_language][0]
+
+    # Store selected language in session state
+    st.session_state.lang = current_lang
+
+    # Load the corresponding translation
+    lang = gettext.translation("messages", localedir=locale_dir, languages=[current_lang], fallback=True)
+    lang.install()
+    _ = lang.gettext
+
+    if ret_cols:
+        return _, col3
+    else: 
+        return _
+    

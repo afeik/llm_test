@@ -1,0 +1,151 @@
+# German translations for chatbot_v package.
+# Copyright (C) 2024 THE chatbot_v'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the chatbot_v package.
+# Andreas  <anfeik@ethz.ch>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: chatbot_v 0_9\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-18 23:03+0100\n"
+"PO-Revision-Date: 2024-11-18 23:06+0100\n"
+"Last-Translator: Andreas  <anfeik@ethz.ch>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: energy_transition_chatbot_main.py:44
+msgid "Try Again?"
+msgstr "Erneut versuchen?"
+
+#: energy_transition_chatbot_main.py:48
+msgid "<h4>Thank you for participating in the conversation!</h4>"
+msgstr "<h4>Vielen Dank für Ihre Teilnahme an der Unterhaltung!</h4>"
+
+#: energy_transition_chatbot_main.py:49
+msgid "If you have further questions feel free to contact us:"
+msgstr "Wenn Sie weitere Fragen haben, können Sie uns gerne kontaktieren:"
+
+#: energy_transition_chatbot_main.py:50
+msgid "Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch"
+msgstr "Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch"
+
+#: energy_transition_chatbot_main.py:51
+msgid "Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch"
+msgstr "Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch"
+
+#: energy_transition_chatbot_main.py:52
+msgid "Andreas Feik (ETH Zürich) anfeik@ethz.ch"
+msgstr "Andreas Feik (ETH Zürich) anfeik@ethz.ch"
+
+#: components/front_page.py:25
+msgid "<h3>Welcome to the Energy Transition Chatbot!</h3>"
+msgstr "<h3>Willkommen beim Energiewende-Chatbot!</h3>"
+
+#: components/front_page.py:31
+msgid "How experienced are you with the energy transition?"
+msgstr "Wie erfahren sind Sie mit der Energiewende?"
+
+#: components/front_page.py:42
+msgid "Start Chatbot"
+msgstr "Chatbot starten"
+
+#: components/ai_conversation.py:41
+msgid "End Conversation"
+msgstr "Unterhaltung beenden"
+
+#: components/ai_conversation.py:98
+msgid "Your response:"
+msgstr "Ihre Antwort:"
+
+#: components/user_ratings.py:21
+msgid "<h4>AI Summary of your concern:</h4>"
+msgstr "<h4>KI Zusammenfassung Ihres Anliegens:</h4>"
+
+#: components/user_ratings.py:51
+msgid "How confident are you that this statement is true?"
+msgstr "Wie sicher sind Sie, dass diese Aussage wahr ist?"
+
+#: components/user_ratings.py:56
+msgid "Submit Initial Rating"
+msgstr "Erste Bewertung abschicken"
+
+#: components/user_ratings.py:79
+msgid "<h4>Your initial concern was summarized as:</h4>"
+msgstr "<h4>Ihr ursprüngliches Anliegen wurde wie folgt zusammengefasst:</h4>"
+
+#: components/user_ratings.py:93
+msgid ""
+"After discussing, how confident are you now that this statement is true?"
+msgstr ""
+"Nach der Diskussion, wie sicher sind Sie jetzt, dass diese Aussage wahr ist?"
+
+#: components/user_ratings.py:94
+msgid "Submit Final Rating"
+msgstr "Abschließende Bewertung abschicken"
+
+#: components/user_summary.py:32
+msgid "<h3>Switzerland's Energy Transition</h3>"
+msgstr "<h3>Die Energiewende in der Schweiz</h3>"
+
+#: components/user_summary.py:39
+msgid ""
+"**Please describe a concrete concern that you have about the Energy "
+"Transition:**"
+msgstr ""
+"**Bitte beschreiben Sie ein konkretes Anliegen, das Sie bezüglich der "
+"Energiewende haben:**"
+
+#: components/user_summary.py:48
+msgid "Submit Concern"
+msgstr "Anliegen absenden"
+
+#: components/user_summary.py:54
+msgid "I'm worried the energy transition will increase electricity bills."
+msgstr "Ich befürchte, dass die Energiewende die Stromrechnungen erhöhen wird."
+
+#: components/user_summary.py:55
+msgid "I'm concerned about blackouts during the transition period."
+msgstr "Ich bin besorgt über Stromausfälle während der Übergangsphase."
+
+#: components/user_summary.py:56
+msgid "I fear job losses in traditional energy sectors."
+msgstr ""
+"Ich fürchte, dass in traditionellen Energiesektoren Arbeitsplätze verloren "
+"gehen."
+
+#: components/user_summary.py:57
+msgid "I'm worried about environmental impacts of new infrastructure."
+msgstr "Ich mache mir Sorgen über die Umweltauswirkungen neuer Infrastruktur."
+
+#: components/user_summary.py:58
+msgid "I feel the transition is moving too fast and disrupting daily life."
+msgstr ""
+"Ich habe das Gefühl, dass der Übergang zu schnell verläuft und den Alltag "
+"stört."
+
+#: components/user_summary.py:62
+msgid "Need inspiration? Click here to see example concerns."
+msgstr ""
+"Brauchen Sie Inspiration? Klicken Sie hier, um Beispielanliegen zu sehen."
+
+#: components/user_summary.py:79
+msgid ""
+"<div style=\"background-color: #000000; color: gray; font-size: 13px; "
+"padding: 5px; text-align: center; border-radius: 5px;\">\n"
+"                            Please enter at least "
+msgstr ""
+"<div style=\"background-color: #000000; color: gray; font-size: 13px; "
+"padding: 5px; text-align: center; border-radius: 5px;\">\n"
+"                            Bitte geben Sie mindestens "
+
+#: components/user_summary.py:82
+msgid " characters. You currently have: "
+msgstr " Zeichen ein. Sie haben derzeit: "
+
+#: components/user_summary.py:83
+msgid " characters.</div>"
+msgstr " Zeichen.</div>"

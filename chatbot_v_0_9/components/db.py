@@ -19,6 +19,7 @@ conversations = Table(
     Column('final_rating', Integer),
     Column('proficiency', String(20)),
     Column('chatbot_version', String(20)),
+    Column('usecase',String(20))
 )
 
 messages = Table(

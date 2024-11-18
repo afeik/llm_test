@@ -23,7 +23,11 @@ def show_impressum():
     #     img2 = Image.open(img2_path).resize((150, 35))
     #     st.image(img2)
 
-    file_path = Path(__file__).parent / "impressum_chatbot.md"
+    if st.session_state.lang == "de":
+        file_path = Path(__file__).parent / "impressum_chatbot_de.md"
+    else: 
+        file_path = Path(__file__).parent / "impressum_chatbot_en.md"
+
     with open(file_path, "r") as file:
         markdown_content = file.read()
     st.markdown(markdown_content)
@@ -39,57 +43,51 @@ def write_footnote(short_version=False):
     short_version : bool, optional
         If True, displays a simplified version of the disclaimer.
     """
-    disclaimer_placeholder = st.container(border=None)
-    
+    # Define a container for the footer
+    disclaimer_placeholder = st.container()
+
     with disclaimer_placeholder:
-        if not short_version: 
-            disclaimer = chatbot_config["disclaimer"]
+        col1, col2 = st.columns([0.3, 0.7],vertical_alignment="top")  # Two columns for alignment
+
+        # Right column: Impressum button
+        with col1:
+            # CSS styling for button
             st.markdown(
-                f"""
-                <div style='color: gray; font-size: 13px;'>
-                    {disclaimer}
-                </div>
+                """
+                <style>
+                /* Hide specific elements */
+                .element-container:has(style) {
+                    display: none;
+                }
+                #button-after {
+                    display: none;
+                }
+                .element-container:has(#button-after) {
+                    display: none;
+                }
+                
+                /* Style the button with a smaller font size */
+                .element-container:has(#button-after) + div button {
+                    background-color: transparent;
+                    color: gray;
+                    border: none;
+                    padding: 0;
+                    font-size: 13px;
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+                </style>
                 """,
-                unsafe_allow_html=True
-            )  
-        
-        # CSS styling for elements in the footnote
-        st.markdown(
-            """
-            <style>
-            /* Hide specific elements */
-            .element-container:has(style) {
-                display: none;
-            }
-            #button-after {
-                display: none;
-            }
-            .element-container:has(#button-after) {
-                display: none;
-            }
-            
-            /* Style the button with a smaller font size */
-            .element-container:has(#button-after) + div button {
-                background-color: transparent;
-                color: gray;
-                border: none;
-                padding: 0;
-                text-decoration: underline;
-                cursor: pointer;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown(f"<p style='font-size:0.8em !important;'>", unsafe_allow_html=True)
+                unsafe_allow_html=True,
+            )
 
-        # Invisible span to target the button
-        st.markdown('<span id="button-after"> </span>', unsafe_allow_html=True)
+            # Invisible span to target the button
+            st.markdown('<span id="button-after"> </span>', unsafe_allow_html=True)
 
-        # Button for Impressum, showing the current chatbot version
-        current_version = chatbot_config["version"]
-        if st.button("Version " + current_version + ", Impressum"):
-            show_impressum()
-        st.markdown(f"</p>", unsafe_allow_html=True)
+            # Visible Impressum button
+            current_version = chatbot_config["version"]
+            if st.button("V" + current_version + ", Impressum"):
+                show_impressum()
+
 
         

@@ -6,99 +6,114 @@ from PIL import Image
 
 from .footnote import write_footnote
 from .db_communication import insert_db_message
-from .utils import get_chatbot_config
+from .utils import get_chatbot_config, language_dropdown
 
 chatbot_config = get_chatbot_config()
 
 def get_user_statement_and_summary(client):
     """
-    Collects a user statement, generates a summary using the Claude API, 
+    Collects a user statement, generates a summary using the Claude API,
     and displays the summary for user confirmation.
     """
+    _ = language_dropdown()
     placeholder = st.empty()
     with placeholder.container():
-        st.markdown("<h2>Switzerland's Energy Transition</h2>", unsafe_allow_html=True)
-        statement = st.text_area("**Please describe a concrete concern that you have about the Energy Transition:**", height=200)
-        
-        min_char_count = 30
-        char_count = len(statement)
+        st.markdown(
+            _("<h3>Switzerland's Energy Transition</h3>"),
+            unsafe_allow_html=True
+        )
 
-        if st.button("Submit Statement"): 
-            can_submit = char_count >= min_char_count
-            if not can_submit:
+        # Display the text area for user input
+        statement = st.text_area(
+            _(
+                "**Please describe a concrete concern that you have about the Energy Transition:**"
+            ),
+            height=200
+        )
+
+        # Create columns for the button and the error message
+        col1, col2, col3 = st.columns([1.5, 3.6, 1])
+
+        with col1:
+            submit_button = st.button(_("Submit Concern"))
+        with col2:
+            error_placeholder = st.empty()
+
+        # Example concerns to be displayed
+        example_concerns = [
+            _("I'm worried the energy transition will increase electricity bills."),
+            _("I'm concerned about blackouts during the transition period."),
+            _("I fear job losses in traditional energy sectors."),
+            _("I'm worried about environmental impacts of new infrastructure."),
+            _("I feel the transition is moving too fast and disrupting daily life."),
+        ]
+
+        # Create an expandable section for example concerns with smaller font size
+        with st.expander(_("Need inspiration? Click here to see example concerns.")):
+            for concern in example_concerns:
                 st.markdown(
-                    f"""
-                    <div style="background-color: #00596D; color: #f0f0f0; font-size: 13px">
-                        Please enter at least {min_char_count} characters.
-                        You currently have {char_count} characters.
-                    </div>
-                    """,
+                    f"<p style='font-size:14px;color:grey;margin-bottom: 10px;'>- {concern}</p>",
                     unsafe_allow_html=True
                 )
+
+        min_char_count = 30
+        char_count = len(statement)  # Using len(statement) as in the initial code
+
+        if submit_button:
+            can_submit = char_count >= min_char_count
+            if not can_submit:
+                # Display the error message in the second column, next to the button
+                with col2:
+                    error_placeholder.markdown(
+                        _(
+                            """<div style="background-color: #000000; color: gray; font-size: 13px; padding: 5px; text-align: center; border-radius: 5px;">
+                            Please enter at least """
+                        ) + str(min_char_count) + _(
+                            """ characters. You currently have: """
+                        ) + str(char_count) + _(""" characters.</div>"""),
+                        unsafe_allow_html=True
+                    )
             else:
+                # Clear the error message if any
+                error_placeholder.empty()
+                if st.session_state.lang == "de":
+                    lang_prompt = "Use German"
+                else:
+                    lang_prompt = "Use English"
+
                 summary_response = client.messages.create(
                     model="claude-3-5-sonnet-20241022",
-                    max_tokens=chatbot_config[st.session_state.proficiency]["summary_max_tokens"],
-                    system=chatbot_config["general"]["general_role"] + chatbot_config[st.session_state.proficiency]["summary_role"],
-                    messages=[{"role": "user", "content": [{"type": "text", "text": statement}]}],
-                    temperature=chatbot_config[st.session_state.proficiency]["summary_temperature"]
+                    max_tokens=chatbot_config[st.session_state.proficiency][
+                        "summary_max_tokens"
+                    ],
+                    system=lang_prompt
+                    + chatbot_config[st.session_state.proficiency]["summary_role"],
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [{"type": "text", "text": statement}],
+                        }
+                    ],
+                    temperature=chatbot_config[st.session_state.proficiency][
+                        "summary_temperature"
+                    ],
                 )
-                
+
                 summary = summary_response.content[0].text.strip()
-                insert_db_message(statement, role="user", message_type="initial_statement")
-                insert_db_message(summary, role="assistant", message_type="initial_statement_summary")
-                
+                insert_db_message(
+                    statement, role="user", message_type="initial_statement"
+                )
+                insert_db_message(
+                    summary, role="assistant", message_type="initial_statement_summary"
+                )
+
                 st.session_state.summary = summary
                 st.session_state.statement = statement
                 st.session_state.step = "initial_rating"
                 st.rerun()
                 placeholder.empty()
 
-    with st.expander("Do you need help formulating your concern? - Let AI give you some Keywords!"):
-        if st.session_state.keywords is None:
-            st.session_state.keywords = get_energy_transition_keywords(client)
-            st.session_state.wordcloud_image = create_wordcloud_image(st.session_state.keywords)
-            st.image(st.session_state.wordcloud_image, use_column_width=True)
-        else:
-            st.image(st.session_state.wordcloud_image, use_column_width=True)
-
     write_footnote()
 
-def get_energy_transition_keywords(client):
-    """
-    Generates keywords related to energy transition using the Claude API.
-    Returns a list of keywords.
-    """
-    keywords_prompt = chatbot_config["keyword_generation"]
-    response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
-        max_tokens=chatbot_config[st.session_state.proficiency]["summary_max_tokens"],
-        system=chatbot_config["general"]["general_role"] + chatbot_config[st.session_state.proficiency]["conversation_role"],
-        messages=[{"role": "user", "content": [{"type": "text", "text": keywords_prompt}]}],
-        temperature=chatbot_config[st.session_state.proficiency]["summary_temperature"]
-    )
-    keywords = response.content[0].text.strip()
-    return keywords.split(", ")
 
-def create_wordcloud_image(keywords):
-    """
-    Creates and returns a word cloud image from a list of keywords.
-    """
-    text = ' '.join(keywords)
-    wordcloud = WordCloud(width=800, height=400, background_color="white").generate(text)
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.imshow(wordcloud, interpolation="bilinear")
-    ax.axis("off")
-    img = plt_to_image(fig)
-    plt.close(fig)
-    return img
-
-def plt_to_image(fig):
-    """
-    Converts a Matplotlib figure to a PIL image and returns it.
-    """
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
-    return Image.open(buf)
