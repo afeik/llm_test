@@ -87,6 +87,7 @@ def get_user_statement_and_summary(client):
                         "summary_max_tokens"
                     ],
                     system=lang_prompt
+                    + chatbot_config["general"]["general_role"]
                     + chatbot_config[st.session_state.proficiency]["summary_role"],
                     messages=[
                         {
