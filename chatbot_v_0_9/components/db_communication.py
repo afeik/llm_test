@@ -1,7 +1,9 @@
 # db_functions.py
+
 from datetime import datetime
 import streamlit as st
 from sqlalchemy.sql import insert, update
+from sqlalchemy.exc import SQLAlchemyError
 
 # Import database session and table definitions from db.py
 from .db import Session, conversations, messages
@@ -14,17 +16,21 @@ def init_db_communication():
     """Initialize a new conversation if none exists in session_state."""
     if "conversation_id" not in st.session_state:
         session = Session()
-
-        result = session.execute(
-            insert(conversations).values(
-                start_time=datetime.now(),
-                chatbot_version=chatbot_config["version"],
-                usecase=chatbot_config["usecase"]
+        try:
+            result = session.execute(
+                insert(conversations).values(
+                    start_time=datetime.now(),
+                    chatbot_version=chatbot_config["version"],
+                    usecase=chatbot_config["usecase"]
+                )
             )
-        )
-        st.session_state.conversation_id = result.inserted_primary_key[0]
-        session.commit()
-        session.close()
+            st.session_state.conversation_id = result.inserted_primary_key[0]
+            session.commit()
+        except SQLAlchemyError as e:
+            session.rollback()
+            st.error(f"Database error during conversation initialization: {e}")
+        finally:
+            session.close()
 
 def insert_db_message(message, role, message_type):
     """Insert a message into the messages table."""
@@ -40,6 +46,9 @@ def insert_db_message(message, role, message_type):
             )
         )
         session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during message insertion: {e}")
     finally:
         session.close()
 
@@ -53,6 +62,9 @@ def insert_initial_rating(rating):
             ).values(initial_rating=rating)
         )
         session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during initial rating insertion: {e}")
     finally:
         session.close()
 
@@ -66,6 +78,9 @@ def insert_final_rating(rating):
             ).values(final_rating=rating)
         )
         session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during final rating insertion: {e}")
     finally:
         session.close()
 
@@ -79,5 +94,8 @@ def update_proficiency():
             ).values(proficiency=st.session_state.proficiency)
         )
         session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during proficiency update: {e}")
     finally:
         session.close()

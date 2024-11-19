@@ -1,11 +1,20 @@
 # db.py
+
 from datetime import datetime
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.pool import QueuePool
 import streamlit as st
 
 # Load database URI from Streamlit secrets
 db_uri = st.secrets["neon_db"]["db_uri"]
+
+# Ensure that db_uri includes 'sslmode=require'
+if 'sslmode' not in db_uri:
+    if '?' in db_uri:
+        db_uri += '&sslmode=require'
+    else:
+        db_uri += '?sslmode=require'
 
 # Initialize Metadata and Database Tables
 metadata = MetaData()
@@ -19,7 +28,7 @@ conversations = Table(
     Column('final_rating', Integer),
     Column('proficiency', String(20)),
     Column('chatbot_version', String(20)),
-    Column('usecase',String(20))
+    Column('usecase', String(20))
 )
 
 messages = Table(
@@ -33,8 +42,16 @@ messages = Table(
 )
 
 # Initialize Database Engine and Session Factory
-engine = create_engine(db_uri)
+engine = create_engine(
+    db_uri,
+    connect_args={"sslmode": "require"},
+    poolclass=QueuePool,
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_recycle=1800  # Recycle connections every 30 minutes
+)
 Session = scoped_session(sessionmaker(bind=engine))
 
-# Create tables if they don't exist
-metadata.create_all(engine)
+# Remove or comment out the following line to prevent recreating tables on each run
+# metadata.create_all(engine)
