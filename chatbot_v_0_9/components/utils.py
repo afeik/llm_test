@@ -154,17 +154,8 @@ def send_ga_event(event_name, event_params=None):
     }
 
     response = requests.post(url, json=payload)
-
+    print(response)
     if response.status_code != 204:
         st.error(f"Failed to send event: {response.text}")
 
-def main():
-    st.title("My Streamlit App")
-    send_ga_event("page_view")  # Log page view
 
-    if st.button("Click Me"):
-        st.write("Button clicked!")
-        send_ga_event("button_click", {"button_name": "Click Me"})
-
-if __name__ == "__main__":
-    main()
