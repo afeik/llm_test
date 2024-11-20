@@ -48,7 +48,7 @@ def claude_conversation(client):
         disclaimer = chatbot_config["disclaimer_en"]
 
     # Top bar with "End Conversation" button aligned to the top right
-    with st.container(height=620, border=False):
+    with st.container(height=720, border=False):
 
         # Initialize conversation and track message turns
         if "conversation_turns" not in st.session_state:
@@ -78,7 +78,7 @@ def claude_conversation(client):
             # Insert to DB 
             insert_db_message(initial_clarification, role = "assistant", message_type = "initial_clarification")
 
-        disp_messages = st.container(height=520,border=False)
+        disp_messages = st.container(height=620,border=False)
 
        # Display chat messages in sequence
         with disp_messages:
