@@ -1,9 +1,4 @@
 import streamlit as st
-from matplotlib import pyplot as plt
-from wordcloud import WordCloud
-import io
-from PIL import Image
-
 from .footnote import write_footnote
 from .db_communication import insert_db_message
 from .utils import get_chatbot_config, language_dropdown

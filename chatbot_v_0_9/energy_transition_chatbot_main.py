@@ -9,13 +9,12 @@ from components.front_page import select_proficiency_level
 from components.ai_conversation import claude_conversation
 from components.footnote import write_footnote
 from components.user_summary import get_user_statement_and_summary
-from components.utils import set_background_color, language_dropdown,add_analytics_tag
+from components.utils import set_background_color, language_dropdown
 
 # Initialize Claude client
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
 
-#add_analytics_tag()
 st.session_state.lang = "de"
 st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 

@@ -5,9 +5,6 @@ import base64
 import os
 from pathlib import Path
 import gettext
-from bs4 import BeautifulSoup
-import shutil
-import logging
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
@@ -128,39 +125,3 @@ def language_dropdown(ret_cols=False):
     else: 
         return _
     
-def inject_ga():
-    # Retrieve the Measurement ID from st.secrets
-    GA_MEASUREMENT_ID = st.secrets["google_analytics"]["measurement_id"]
-
-    # Google Analytics tracking code
-    ga_code = f"""
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){{dataLayer.push(arguments);}}
-      gtag('js', new Date());
-
-      gtag('config', '{GA_MEASUREMENT_ID}');
-    </script>
-    """
-
-    # Inject the Google Analytics script into the app
-    st.components.v1.html(ga_code, height=0)
-
-
-
-def add_analytics_tag():
-
-    GA_MEASUREMENT_ID = st.secrets["google_analytics"]["measurement_id"]
-    st.markdown(
-        f"""
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-            <script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){{dataLayer.push(arguments);}}
-                gtag('js', new Date());
-                gtag('config', '{GA_MEASUREMENT_ID}');
-            </script>
-        """, unsafe_allow_html=True)
