@@ -1,6 +1,6 @@
 import streamlit as st
 from .footnote import write_footnote
-from .utils import language_dropdown, get_chatbot_config
+from .utils import language_dropdown, get_chatbot_config, send_ga_event
 from .db_communication import insert_final_rating, insert_initial_rating
 chatbot_config = get_chatbot_config() 
 
@@ -54,6 +54,7 @@ def get_initial_rating():
                     pass
 
                 if st.button(_("Submit Initial Rating"), key="submit_initial_rating"):
+                    send_ga_event("initial_rating")
                     insert_initial_rating(st.session_state.initial_rating_slider)
                     st.session_state["initial_rating_submitted"] = True
                     st.session_state.initial_rating = st.session_state.initial_rating_slider
@@ -91,6 +92,7 @@ def get_final_rating():
         )
         st.write(_("After discussing, how confident are you now that this statement is true?"))
         if st.button(_("Submit Final Rating"), key="submit_final_rating"):
+            send_ga_event("final_rating")
             insert_final_rating(st.session_state.final_rating_slider)
             st.session_state["final_rating_submitted"] = True
             st.session_state.final_rating = st.session_state.final_rating_slider

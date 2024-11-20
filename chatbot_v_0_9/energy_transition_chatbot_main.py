@@ -12,7 +12,6 @@ from components.user_summary import get_user_statement_and_summary
 from components.utils import set_background_color, language_dropdown,send_ga_event
 
 # Initialize Claude client
-send_ga_event("page_view")
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
 
@@ -24,6 +23,7 @@ set_background_color("#000000")
 
 ### Main App Flow ### 
 if "step" not in st.session_state:
+    send_ga_event("page_view")
     st.session_state.keywords = None
     st.session_state.step = "select_proficiency"
 
@@ -46,6 +46,7 @@ if st.session_state.step == "completed":
     _, col = language_dropdown(ret_cols=True)
     with col: 
         if st.button(_("Try Again?")):
+            send_ga_event("try_again")
             st.session_state.clear()
             st.rerun()
 

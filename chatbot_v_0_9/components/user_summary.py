@@ -1,7 +1,7 @@
 import streamlit as st
 from .footnote import write_footnote
 from .db_communication import insert_db_message
-from .utils import get_chatbot_config, language_dropdown
+from .utils import get_chatbot_config, language_dropdown,send_ga_event
 
 chatbot_config = get_chatbot_config()
 
@@ -57,6 +57,7 @@ def get_user_statement_and_summary(client):
         if submit_button:
             can_submit = char_count >= min_char_count
             if not can_submit:
+                send_ga_event("initial_statement_too_few_characters")
                 # Display the error message in the second column, next to the button
                 with col2:
                     error_placeholder.markdown(
@@ -70,6 +71,7 @@ def get_user_statement_and_summary(client):
                     )
             else:
                 # Clear the error message if any
+                send_ga_event("initial_statement_submitted")
                 error_placeholder.empty()
                 if st.session_state.lang == "de":
                     lang_prompt = "Use German"

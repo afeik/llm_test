@@ -1,7 +1,7 @@
 import streamlit as st
 from .footnote import write_footnote
 from .db_communication import update_proficiency, init_db_communication
-from .utils import get_image_path, language_dropdown
+from .utils import get_image_path, language_dropdown,send_ga_event
 from PIL import Image
 
 # Function that queries the experience level of the user regarding the energy transition
@@ -33,6 +33,7 @@ def select_proficiency_level():
 
         if proficiency_rating >=0 and proficiency_rating<=33:
             st.session_state.proficiency = "beginner"
+            
 
         elif proficiency_rating >33 and proficiency_rating<=66: 
             st.session_state.proficiency = "intermediate"
@@ -41,6 +42,7 @@ def select_proficiency_level():
             st.session_state.proficiency = "expert"
 
         if st.button(_("Start Chatbot")): 
+            send_ga_event(f"proficiency_{st.session_state.proficiency}")
             st.session_state.proficiency_selected = True
             st.session_state.step = "initial_statement"
             placeholder.empty()
