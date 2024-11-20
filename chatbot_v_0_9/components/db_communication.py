@@ -14,26 +14,32 @@ chatbot_config = get_chatbot_config()
 
 def init_db_communication():
     """Initialize a new conversation if none exists in session_state."""
-    if "conversation_id" not in st.session_state:
-        session = Session()
-        try:
-            result = session.execute(
-                insert(conversations).values(
-                    start_time=datetime.now(),
-                    chatbot_version=chatbot_config["version"],
-                    usecase=chatbot_config["usecase"]
-                )
+    if "conversation_id" in st.session_state:
+        return  # Already initialized
+
+    session = Session()
+    try:
+        result = session.execute(
+            insert(conversations).values(
+                start_time=datetime.now(),
+                chatbot_version=chatbot_config.get("version", "unknown"),
+                usecase=chatbot_config.get("usecase", "unknown")
             )
-            st.session_state.conversation_id = result.inserted_primary_key[0]
-            session.commit()
-        except SQLAlchemyError as e:
-            session.rollback()
-            st.error(f"Database error during conversation initialization: {e}")
-        finally:
-            session.close()
+        )
+        session.commit()
+        st.session_state.conversation_id = result.inserted_primary_key[0]
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during conversation initialization: {e}")
+        st.stop()  # Stop the app if the conversation can't be initialized
+    finally:
+        session.close()
+
 
 def insert_db_message(message, role, message_type):
     """Insert a message into the messages table."""
+    if "conversation_id" not in st.session_state:
+        init_db_communication()
     session = Session()
     try:
         session.execute(
