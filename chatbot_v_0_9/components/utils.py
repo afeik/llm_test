@@ -126,20 +126,21 @@ def language_dropdown(ret_cols=False):
         return _
     
 def inject_ga():
-    GA_TRACKING_ID = st.secrets["ga_id"]["ga_id"] # Replace with your GA Measurement ID
+    # Retrieve the Measurement ID from st.secrets
+    GA_MEASUREMENT_ID = st.secrets["google_analytics"]["measurement_id"]
 
     # Google Analytics tracking code
     ga_code = f"""
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_TRACKING_ID}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){{dataLayer.push(arguments);}}
-    gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
 
-    gtag('config', '{GA_TRACKING_ID}');
+      gtag('config', '{GA_MEASUREMENT_ID}');
     </script>
     """
 
-    # Inject the script into the head of the Streamlit app
+    # Inject the Google Analytics script into the app
     st.components.v1.html(ga_code, height=0)
