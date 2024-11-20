@@ -5,6 +5,9 @@ import base64
 import os
 from pathlib import Path
 import gettext
+from bs4 import BeautifulSoup
+import shutil
+import logging
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
@@ -124,3 +127,54 @@ def language_dropdown(ret_cols=False):
         return _, col3
     else: 
         return _
+    
+def inject_ga():
+    # Retrieve the Measurement ID from st.secrets
+    GA_MEASUREMENT_ID = st.secrets["google_analytics"]["measurement_id"]
+
+    # Google Analytics tracking code
+    ga_code = f"""
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
+
+      gtag('config', '{GA_MEASUREMENT_ID}');
+    </script>
+    """
+
+    # Inject the Google Analytics script into the app
+    st.components.v1.html(ga_code, height=0)
+
+
+
+def add_analytics_tag():
+
+    GA_MEASUREMENT_ID = st.secrets["google_analytics"]["measurement_id"]
+    analytics_js = f"""
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){{dataLayer.push(arguments);}}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+    <div id={GA_MEASUREMENT_ID}"></div>
+    """
+
+    # Identify html path of streamlit
+    index_path = Path(st.__file__).parent / "static" / "index.html"
+    logging.info(f'editing {index_path}')
+    soup = BeautifulSoup(index_path.read_text(), features="html.parser")
+    if not soup.find(id=GA_MEASUREMENT_ID): # if id not found within html file
+        bck_index = index_path.with_suffix('.bck')
+        if bck_index.exists():
+            shutil.copy(bck_index, index_path)  # backup recovery
+        else:
+            shutil.copy(index_path, bck_index)  # save backup
+        html = str(soup)
+        new_html = html.replace('<head>', '<head>\n' + analytics_js) 
+        index_path.write_text(new_html) # insert analytics tag at top of head
