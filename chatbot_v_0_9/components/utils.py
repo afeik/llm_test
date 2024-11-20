@@ -125,3 +125,23 @@ def language_dropdown(ret_cols=False):
     else: 
         return _
     
+
+def add_statcounter():
+    statcounter_code = """
+    <!-- Default Statcounter code for LLM Testwebsite
+        https://llmtest-eth-psl.streamlit.app/ -->
+        <script type="text/javascript">
+        var sc_project=13062665; 
+        var sc_invisible=1; 
+        var sc_security="b897c34b"; 
+        </script>
+        <script type="text/javascript"
+        src="https://www.statcounter.com/counter/counter.js" async></script>
+        <noscript><div class="statcounter"><a title="Web Analytics"
+        href="https://statcounter.com/" target="_blank"><img class="statcounter"
+        src="https://c.statcounter.com/13062665/0/b897c34b/1/" alt="Web Analytics"
+        referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+    <!-- End of Statcounter Code -->
+    """
+    # Embed the tracking code in your app
+    st.components.v1.html(statcounter_code, height=0)

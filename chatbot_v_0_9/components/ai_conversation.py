@@ -1,5 +1,4 @@
 import streamlit as st
-import gettext
 from .utils import stream_data, get_chatbot_config,language_dropdown
 from .footnote import write_footnote
 from .db_communication import insert_db_message
