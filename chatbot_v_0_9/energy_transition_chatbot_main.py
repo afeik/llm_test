@@ -2,6 +2,7 @@
 import streamlit as st 
 import anthropic  # Importing the Claude AI client
 from pathlib import Path
+import streamlit_analytics
 
 # Import Page Components and Utils
 from components.user_ratings import get_initial_rating, get_final_rating
@@ -24,8 +25,9 @@ set_background_color("#000000")
 ### Main App Flow ### 
 if "step" not in st.session_state:
     send_ga_event("page_view")
-    st.session_state.keywords = None
-    st.session_state.step = "select_proficiency"
+    with streamlit_analytics.track():
+        st.session_state.keywords = None
+        st.session_state.step = "select_proficiency"
 
 if st.session_state.step == "select_proficiency":
     select_proficiency_level()
