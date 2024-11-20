@@ -5,6 +5,9 @@ import base64
 import os
 from pathlib import Path
 import gettext
+import requests
+import uuid
+
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
@@ -124,24 +127,44 @@ def language_dropdown(ret_cols=False):
         return _, col3
     else: 
         return _
-    
 
-def add_statcounter():
-    statcounter_code = """
-    <!-- Default Statcounter code for LLM Testwebsite
-        https://llmtest-eth-psl.streamlit.app/ -->
-        <script type="text/javascript">
-        var sc_project=13062665; 
-        var sc_invisible=1; 
-        var sc_security="b897c34b"; 
-        </script>
-        <script type="text/javascript"
-        src="https://www.statcounter.com/counter/counter.js" async></script>
-        <noscript><div class="statcounter"><a title="Web Analytics"
-        href="https://statcounter.com/" target="_blank"><img class="statcounter"
-        src="https://c.statcounter.com/13062665/0/b897c34b/1/" alt="Web Analytics"
-        referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
-    <!-- End of Statcounter Code -->
+
+
+def send_ga_event(event_name, event_params=None):
     """
-    # Embed the tracking code in your app
-    st.components.v1.html(statcounter_code, height=0)
+    Send events to Google Analytics using the Measurement Protocol.
+    """
+    measurement_id = st.secrets["google_analytics"]["measurement_id"]
+    api_secret = st.secrets["google_analytics"]["api_secret"]
+    client_id = st.session_state.get("client_id", str(uuid.uuid4()))
+
+    if "client_id" not in st.session_state:
+        st.session_state["client_id"] = client_id
+
+    url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+
+    payload = {
+        "client_id": client_id,
+        "events": [
+            {
+                "name": event_name,
+                "params": event_params or {}
+            }
+        ]
+    }
+
+    response = requests.post(url, json=payload)
+
+    if response.status_code != 204:
+        st.error(f"Failed to send event: {response.text}")
+
+def main():
+    st.title("My Streamlit App")
+    send_ga_event("page_view")  # Log page view
+
+    if st.button("Click Me"):
+        st.write("Button clicked!")
+        send_ga_event("button_click", {"button_name": "Click Me"})
+
+if __name__ == "__main__":
+    main()
