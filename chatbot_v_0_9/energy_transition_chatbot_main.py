@@ -15,7 +15,7 @@ from components.utils import set_background_color, language_dropdown,add_analyti
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
 
-add_analytics_tag()
+#add_analytics_tag()
 st.session_state.lang = "de"
 st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 
