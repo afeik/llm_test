@@ -1,6 +1,7 @@
 import streamlit as st
+import streamlit_analytics
 from PIL import Image
-from .utils import get_chatbot_config, get_image_path
+from .utils import get_chatbot_config
 from PIL import Image
 from pathlib import Path
 
@@ -86,6 +87,7 @@ def write_footnote(short_version=False):
 
             # Visible Impressum button
             current_version = chatbot_config["version"]
+
             if st.button("V" + current_version + ", Impressum"):
                 show_impressum()
 

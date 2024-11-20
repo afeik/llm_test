@@ -9,10 +9,7 @@ from components.front_page import select_proficiency_level
 from components.ai_conversation import claude_conversation
 from components.footnote import write_footnote
 from components.user_summary import get_user_statement_and_summary
-from components.utils import set_background_color, language_dropdown,inject_ga
-
-# Analyze Website Usage
-inject_ga()
+from components.utils import set_background_color, language_dropdown
 
 # Initialize Claude client
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
@@ -57,6 +54,7 @@ if st.session_state.step == "completed":
     st.write(_("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch"))
     st.write(_("Andreas Feik (ETH Zürich) anfeik@ethz.ch"))
     write_footnote(short_version=True)
+
 
 
 

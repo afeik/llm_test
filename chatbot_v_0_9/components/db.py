@@ -53,5 +53,3 @@ engine = create_engine(
 )
 Session = scoped_session(sessionmaker(bind=engine))
 
-# Remove or comment out the following line to prevent recreating tables on each run
-# metadata.create_all(engine)

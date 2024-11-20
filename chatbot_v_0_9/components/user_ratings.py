@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit_analytics
 from .footnote import write_footnote
 from .utils import language_dropdown, get_chatbot_config
 from .db_communication import insert_final_rating, insert_initial_rating
@@ -39,11 +40,12 @@ def get_initial_rating():
                         """,
                         unsafe_allow_html=True
                 )
-                st.slider(
-                    "",
-                    0, 100,
-                    key="initial_rating_slider"
-                )
+                with streamlit_analytics.track():
+                    st.slider(
+                        "",
+                        0, 100,
+                        key="initial_rating_slider"
+                    )
                 # Create two columns
                 col1, col2 = st.columns([1, 1])  # Adjust proportions as necessary
 
@@ -52,14 +54,15 @@ def get_initial_rating():
 
                 with col2:
                     pass
-
-                if st.button(_("Submit Initial Rating"), key="submit_initial_rating"):
-                    insert_initial_rating(st.session_state.initial_rating_slider)
-                    st.session_state["initial_rating_submitted"] = True
-                    st.session_state.initial_rating = st.session_state.initial_rating_slider
-                    st.session_state.step = "conversation"
-                    placeholder.empty()
-                    st.rerun()
+                
+                with streamlit_analytics.track():
+                    if st.button(_("Submit Initial Rating"), key="submit_initial_rating"):
+                        insert_initial_rating(st.session_state.initial_rating_slider)
+                        st.session_state["initial_rating_submitted"] = True
+                        st.session_state.initial_rating = st.session_state.initial_rating_slider
+                        st.session_state.step = "conversation"
+                        placeholder.empty()
+                        st.rerun()
 
             write_footnote()
     else:
@@ -84,17 +87,18 @@ def get_final_rating():
         st.session_state["final_rating_submitted"] = False
 
     if not st.session_state["final_rating_submitted"]:
-        st.slider(
-            "",
-            0, 100,
-            key="final_rating_slider"
-        )
-        st.write(_("After discussing, how confident are you now that this statement is true?"))
-        if st.button(_("Submit Final Rating"), key="submit_final_rating"):
-            insert_final_rating(st.session_state.final_rating_slider)
-            st.session_state["final_rating_submitted"] = True
-            st.session_state.final_rating = st.session_state.final_rating_slider
-            st.session_state.step = "completed"
-            st.rerun()
+        with streamlit_analytics.track():
+            st.slider(
+                "",
+                0, 100,
+                key="final_rating_slider"
+            )
+            st.write(_("After discussing, how confident are you now that this statement is true?"))
+            if st.button(_("Submit Final Rating"), key="submit_final_rating"):
+                insert_final_rating(st.session_state.final_rating_slider)
+                st.session_state["final_rating_submitted"] = True
+                st.session_state.final_rating = st.session_state.final_rating_slider
+                st.session_state.step = "completed"
+                st.rerun()
 
     write_footnote(short_version=True)
