@@ -2,7 +2,7 @@
 import streamlit as st 
 import anthropic  # Importing the Claude AI client
 from pathlib import Path
-import streamlit_analytics
+import streamlit_analytics2
 
 # Import Page Components and Utils
 from components.user_ratings import get_initial_rating, get_final_rating
@@ -22,7 +22,7 @@ st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 # Change background color to dark petrol (ETH Color)
 set_background_color("#000000")
 
-with streamlit_analytics.track():
+with streamlit_analytics2.track():
     ### Main App Flow ### 
     if "step" not in st.session_state:
         send_ga_event("page_view")

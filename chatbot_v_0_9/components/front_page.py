@@ -1,5 +1,4 @@
 import streamlit as st
-import streamlit_analytics
 from .footnote import write_footnote
 from .db_communication import update_proficiency, init_db_communication
 from .utils import get_image_path, language_dropdown,send_ga_event
