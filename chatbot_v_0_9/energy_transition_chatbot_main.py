@@ -22,42 +22,42 @@ st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 # Change background color to dark petrol (ETH Color)
 set_background_color("#000000")
 
-### Main App Flow ### 
-if "step" not in st.session_state:
-    send_ga_event("page_view")
-    with streamlit_analytics.track():
+with streamlit_analytics.track():
+    ### Main App Flow ### 
+    if "step" not in st.session_state:
+        send_ga_event("page_view")
         st.session_state.keywords = None
         st.session_state.step = "select_proficiency"
 
-if st.session_state.step == "select_proficiency":
-    select_proficiency_level()
-    
-if st.session_state.step == "initial_statement":
-    get_user_statement_and_summary(claude_client)
+    if st.session_state.step == "select_proficiency":
+        select_proficiency_level()
+        
+    if st.session_state.step == "initial_statement":
+        get_user_statement_and_summary(claude_client)
 
-if st.session_state.step == "initial_rating":
-    get_initial_rating()
+    if st.session_state.step == "initial_rating":
+        get_initial_rating()
 
-if st.session_state.step == "conversation":
-    claude_conversation(claude_client)
+    if st.session_state.step == "conversation":
+        claude_conversation(claude_client)
 
-if st.session_state.step == "final_rating":
-    get_final_rating()
+    if st.session_state.step == "final_rating":
+        get_final_rating()
 
-if st.session_state.step == "completed":
-    _, col = language_dropdown(ret_cols=True)
-    with col: 
-        if st.button(_("Try Again?")):
-            send_ga_event("try_again")
-            st.session_state.clear()
-            st.rerun()
+    if st.session_state.step == "completed":
+        _, col = language_dropdown(ret_cols=True)
+        with col: 
+            if st.button(_("Try Again?")):
+                send_ga_event("try_again")
+                st.session_state.clear()
+                st.rerun()
 
-    st.write(_("<h4>Thank you for participating in the conversation!</h4>"),unsafe_allow_html=True)
-    st.write(_("If you have further questions feel free to contact us:"))
-    st.write(_("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch"))
-    st.write(_("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch"))
-    st.write(_("Andreas Feik (ETH Zürich) anfeik@ethz.ch"))
-    write_footnote(short_version=True)
+        st.write(_("<h4>Thank you for participating in the conversation!</h4>"),unsafe_allow_html=True)
+        st.write(_("If you have further questions feel free to contact us:"))
+        st.write(_("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch"))
+        st.write(_("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch"))
+        st.write(_("Andreas Feik (ETH Zürich) anfeik@ethz.ch"))
+        write_footnote(short_version=True)
 
 
 

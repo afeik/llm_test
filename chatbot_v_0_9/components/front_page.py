@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit_analytics
 from .footnote import write_footnote
 from .db_communication import update_proficiency, init_db_communication
 from .utils import get_image_path, language_dropdown,send_ga_event
@@ -40,9 +41,9 @@ def select_proficiency_level():
 
         elif proficiency_rating >66 and proficiency_rating<=100:
             st.session_state.proficiency = "expert"
-
+        
         if st.button(_("Start Chatbot")): 
-            send_ga_event(f"proficiency_{st.session_state.proficiency}")
+            #send_ga_event(f"proficiency_{st.session_state.proficiency}")
             st.session_state.proficiency_selected = True
             st.session_state.step = "initial_statement"
             placeholder.empty()

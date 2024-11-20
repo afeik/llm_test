@@ -154,7 +154,7 @@ def send_ga_event(event_name, event_params=None):
     }
 
     response = requests.post(url, json=payload)
-    print(response)
+
     if response.status_code != 204:
         st.error(f"Failed to send event: {response.text}")
 
