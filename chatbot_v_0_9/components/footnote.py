@@ -1,8 +1,5 @@
 import streamlit as st
-import streamlit_analytics
-from PIL import Image
 from .utils import get_chatbot_config
-from PIL import Image
 from pathlib import Path
 
 chatbot_config = get_chatbot_config() 
