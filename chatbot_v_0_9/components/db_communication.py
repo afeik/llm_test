@@ -108,3 +108,40 @@ def update_proficiency():
         st.stop()
     finally:
         session.close()
+
+def insert_full_conversation_details(age_group, gender, highest_degree, consent_given):
+    """
+    Insert additional conversation details into the database.
+
+    Args:
+        age_group (str): User's age group.
+        gender (str): User's gender.
+        highest_degree (str): User's highest degree.
+        consent_given (bool): Whether the user gave consent.
+
+    Returns:
+        None
+    """
+    if "conversation_id" not in st.session_state:
+        init_db_communication()  # Ensure a conversation is initialized before inserting details
+
+    session = Session()
+    try:
+        # Update the existing conversation with additional details
+        session.execute(
+            update(conversations).where(
+                conversations.c.conversation_id == st.session_state.conversation_id
+            ).values(
+                age_group=age_group,
+                gender=gender,
+                highest_degree=highest_degree,
+                consent_given=consent_given
+            )
+        )
+        session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during full conversation details insertion: {e}")
+    finally:
+        session.close()
+

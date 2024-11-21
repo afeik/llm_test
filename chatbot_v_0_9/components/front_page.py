@@ -22,34 +22,41 @@ def select_proficiency_level():
 
 
     with placeholder.container():
-
         st.markdown(_("<h3>Welcome to the Energy Transition Chatbot!</h3>"), unsafe_allow_html=True)
+
         # Load and display the image
         image_path = get_image_path("energy_transition_switzerland.png")
         image = Image.open(image_path)
         st.image(image, use_column_width=True)
 
-        proficiency_rating = st.slider(_("How experienced are you with the energy transition?"), 0, 100)
 
-        if proficiency_rating >=0 and proficiency_rating<=33:
+
+        # Slider for proficiency rating
+        proficiency_rating = st.slider(
+            _("How would you rate your knowledge about the energy transition?"), 0, 100
+        )
+
+        # Checkbox for consent
+        consent_given = st.checkbox(
+            _("I acknowledge that data collected during this session will be securely stored and used solely for research purposes at ETH Zurich.")
+        )
+        # Determine proficiency level
+        if 0 <= proficiency_rating <= 33:
             st.session_state.proficiency = "beginner"
-            
-
-        elif proficiency_rating >33 and proficiency_rating<=66: 
+        elif 34 <= proficiency_rating <= 66:
             st.session_state.proficiency = "intermediate"
-
-        elif proficiency_rating >66 and proficiency_rating<=100:
+        elif 67 <= proficiency_rating <= 100:
             st.session_state.proficiency = "expert"
-        
-        if st.button(_("Start Chatbot")): 
-            #send_ga_event(f"proficiency_{st.session_state.proficiency}")
+
+        # Disable the button unless consent is given
+        if st.button(_("Start Chatbot"), disabled=not consent_given):
             st.session_state.proficiency_selected = True
             st.session_state.step = "initial_statement"
+            st.session_state.consent_given = True
             placeholder.empty()
             init_db_communication()
             update_proficiency()
             st.rerun()
-        
-        st.markdown('</div>', unsafe_allow_html=True)
 
+        st.markdown('</div>', unsafe_allow_html=True)
         write_footnote(short_version=True)

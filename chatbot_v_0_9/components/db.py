@@ -19,18 +19,32 @@ if 'sslmode' not in db_uri:
 # Initialize Metadata and Database Tables
 metadata = MetaData()
 
-# Define tables
+from sqlalchemy import (
+    Table, Column, Integer, String, Text, TIMESTAMP, Boolean, create_engine, MetaData
+)
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.pool import QueuePool
+from datetime import datetime
+
+metadata = MetaData()
+
+# Define the conversations table
 conversations = Table(
     'conversations', metadata,
     Column('conversation_id', Integer, primary_key=True, autoincrement=True),
     Column('start_time', TIMESTAMP, default=datetime.now),
-    Column('initial_rating', Integer),
-    Column('final_rating', Integer),
-    Column('proficiency', String(20)),
-    Column('chatbot_version', String(20)),
-    Column('usecase', String(20))
+    Column('initial_rating', Integer),  # Initial rating provided by the user
+    Column('final_rating', Integer),    # Final rating provided by the user
+    Column('proficiency', String(20)), # User's proficiency level
+    Column('chatbot_version', String(20)), # Chatbot version used
+    Column('usecase', String(20)), # Use case or scenario
+    Column('age_group', String(50)), # User's age group
+    Column('gender', String(20)), # User's gender
+    Column('highest_degree', String(50)), # User's highest degree
+    Column('consent_given', Boolean, nullable=False, default=False) # Whether consent is given
 )
 
+# Define the messages table
 messages = Table(
     'messages', metadata,
     Column('message_id', Integer, primary_key=True, autoincrement=True),
@@ -52,4 +66,5 @@ engine = create_engine(
     pool_recycle=1800  # Recycle connections every 30 minutes
 )
 Session = scoped_session(sessionmaker(bind=engine))
+
 
