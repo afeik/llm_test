@@ -37,7 +37,7 @@ def init_db_communication():
 
 def insert_db_message(message, role, message_type):
     """Insert a message into the messages table."""
-    if "conversation_id" not in st.session_state or st.session_state.conversation_id == None:
+    if "conversation_id" not in st.session_state or st.session_state.conversation_id is None:
         init_db_communication()
     session = Session()
     try:
