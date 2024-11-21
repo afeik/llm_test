@@ -14,8 +14,8 @@ chatbot_config = get_chatbot_config()
 
 def init_db_communication():
     """Initialize a new conversation if none exists in session_state."""
-    if "conversation_id" in st.session_state and st.session_state.conversation_id is not None:
-        return  # Already initialized
+    #if "conversation_id" in st.session_state and st.session_state.conversation_id is not None:
+        #return  # Already initialized
 
     session = Session()
     try:
