@@ -31,7 +31,6 @@ def init_db_communication():
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during conversation initialization: {e}")
-        st.stop()  # Stop the app if the conversation can't be initialized
     finally:
         session.close()
 
@@ -55,7 +54,6 @@ def insert_db_message(message, role, message_type):
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during message insertion: {e}")
-        st.stop()
     finally:
         session.close()
 
@@ -72,7 +70,6 @@ def insert_initial_rating(rating):
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during initial rating insertion: {e}")
-        st.stop()
     finally:
         session.close()
 
@@ -89,7 +86,6 @@ def insert_final_rating(rating):
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during final rating insertion: {e}")
-        st.stop()
     finally:
         session.close()
 
@@ -106,7 +102,6 @@ def update_proficiency():
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during proficiency update: {e}")
-        st.stop()
     finally:
         session.close()
 
@@ -143,7 +138,6 @@ def insert_full_conversation_details(age_group, gender, highest_degree, consent_
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during full conversation details insertion: {e}")
-        st.stop()
     finally:
         session.close()
 
