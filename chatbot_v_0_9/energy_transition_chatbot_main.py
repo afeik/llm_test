@@ -31,6 +31,10 @@ if "proficiency_selected" not in st.session_state:
 if "consent_given" not in st.session_state:
     st.session_state.consent_given = False
 
+if "conversation_id" not in st.session_state:
+    st.session_state.conversation_id = None  # Or set a default value like ""
+
+
 # Initialize Claude client
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
