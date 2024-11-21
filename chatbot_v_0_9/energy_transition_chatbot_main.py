@@ -19,9 +19,6 @@ claude_client = anthropic.Client(api_key=anthropic_api_key)
 st.session_state.lang = "de"
 st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 
-st.set_page_config(
-    theme="light"
-)
 with streamlit_analytics2.track():
     ### Main App Flow ### 
     if "step" not in st.session_state:
