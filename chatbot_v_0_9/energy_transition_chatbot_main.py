@@ -25,7 +25,7 @@ set_background_color("#FFFFFF")
 with streamlit_analytics2.track():
     ### Main App Flow ### 
     if "step" not in st.session_state:
-        send_ga_event("page_view")
+        #send_ga_event("page_view")
         st.session_state.keywords = None
         st.session_state.step = "select_proficiency"
 
@@ -48,7 +48,7 @@ with streamlit_analytics2.track():
         _, col = language_dropdown(ret_cols=True)
         with col: 
             if st.button(_("Try Again?")):
-                send_ga_event("try_again")
+                #send_ga_event("try_again")
                 st.session_state.clear()
                 st.rerun()
 
