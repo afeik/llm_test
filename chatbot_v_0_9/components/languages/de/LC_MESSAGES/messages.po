@@ -78,7 +78,7 @@ msgstr "Endgültige Bewertung abgeben"
 
 #: components/user_summary.py:17
 msgid "<h4>Switzerland's Energy Transition</h4>"
-msgstr "<h4>Die Energiestrategie der Schweiz</h4>"
+msgstr "<h4>Die Energiewende in der Schweiz</h4>"
 
 #: components/user_summary.py:23
 msgid "Age Group:"
@@ -146,7 +146,7 @@ msgstr "Höchster erreichter Abschluss:"
 
 #: components/user_summary.py:48
 msgid "High School"
-msgstr "Abitur"
+msgstr "Matura"
 
 #: components/user_summary.py:48
 msgid "Bachelor's"
