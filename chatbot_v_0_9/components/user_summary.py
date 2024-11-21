@@ -1,8 +1,7 @@
 import streamlit as st
 from .footnote import write_footnote
 from .db_communication import insert_db_message
-from .utils import get_chatbot_config, language_dropdown,send_ga_event
-import streamlit_analytics
+from .utils import get_chatbot_config, language_dropdown
 
 chatbot_config = get_chatbot_config()
 

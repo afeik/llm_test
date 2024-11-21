@@ -1,7 +1,7 @@
 import streamlit as st
 from .footnote import write_footnote
 from .db_communication import update_proficiency, init_db_communication
-from .utils import get_image_path, language_dropdown,send_ga_event
+from .utils import get_image_path, language_dropdown 
 from PIL import Image
 
 # Function that queries the experience level of the user regarding the energy transition

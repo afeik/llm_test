@@ -1,7 +1,9 @@
 import streamlit as st
 from .footnote import write_footnote
-from .utils import language_dropdown, get_chatbot_config, send_ga_event
+from .utils import language_dropdown, get_chatbot_config
 from .db_communication import insert_final_rating, insert_initial_rating
+
+# Obtain Config
 chatbot_config = get_chatbot_config() 
 
 def get_initial_rating():

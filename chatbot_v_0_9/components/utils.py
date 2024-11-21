@@ -130,32 +130,32 @@ def language_dropdown(ret_cols=False):
 
 
 
-def send_ga_event(event_name, event_params=None):
-    """
-    Send events to Google Analytics using the Measurement Protocol.
-    """
-    measurement_id = st.secrets["google_analytics"]["measurement_id"]
-    api_secret = st.secrets["google_analytics"]["api_secret"]
-    client_id = st.session_state.get("client_id", str(uuid.uuid4()))
+# def send_ga_event(event_name, event_params=None):
+#     """
+#     Send events to Google Analytics using the Measurement Protocol.
+#     """
+#     measurement_id = st.secrets["google_analytics"]["measurement_id"]
+#     api_secret = st.secrets["google_analytics"]["api_secret"]
+#     client_id = st.session_state.get("client_id", str(uuid.uuid4()))
 
-    if "client_id" not in st.session_state:
-        st.session_state["client_id"] = client_id
+#     if "client_id" not in st.session_state:
+#         st.session_state["client_id"] = client_id
 
-    url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
+#     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
 
-    payload = {
-        "client_id": client_id,
-        "events": [
-            {
-                "name": event_name,
-                "params": event_params or {}
-            }
-        ]
-    }
+#     payload = {
+#         "client_id": client_id,
+#         "events": [
+#             {
+#                 "name": event_name,
+#                 "params": event_params or {}
+#             }
+#         ]
+#     }
 
-    response = requests.post(url, json=payload)
+#     response = requests.post(url, json=payload)
 
-    if response.status_code != 204:
-        st.error(f"Failed to send event: {response.text}")
+#     if response.status_code != 204:
+#         st.error(f"Failed to send event: {response.text}")
 
 
