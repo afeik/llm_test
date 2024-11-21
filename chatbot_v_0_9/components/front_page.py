@@ -19,6 +19,8 @@ def select_proficiency_level():
         st.session_state.step = "select_proficiency"
     if "consent_given" not in st.session_state:
         st.session_state.consent_given = False
+    if "conversation_id" not in st.session_state:
+        st.session_state.conversation_id = None
 
     placeholder = st.empty()
 
@@ -26,12 +28,10 @@ def select_proficiency_level():
         st.markdown(_("<h3>Welcome to the Energy Transition Chatbot!</h3>"), unsafe_allow_html=True)
 
         # Load and display the image
-        try:
-            image_path = get_image_path("energy_transition_switzerland.png")
-            image = Image.open(image_path)
-            st.image(image, use_column_width=True)
-        except FileNotFoundError:
-            st.error("Image not found. Please ensure the file exists.")
+
+        image_path = get_image_path("energy_transition_switzerland.png")
+        image = Image.open(image_path)
+        st.image(image, use_column_width=True)
 
         # Slider for proficiency rating
         proficiency_rating = st.slider(
