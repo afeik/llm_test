@@ -17,6 +17,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: energy_transition_chatbot_main.py:78
+msgid "If you have further questions, contact us:"
+msgstr "Falls Sie weitere Fragen haben kontaktieren Sie uns gerne:"
+
+#: energy_transition_chatbot_main.py:79
+msgid "<h4>Thank you for participating!</h4>"
+msgstr "<h4>Vielen Dank für die Teilnahme an der Konversation!</h4>"
+
 #: components/front_page.py:26
 msgid "<h3>Welcome to the Energy Transition Chatbot!</h3>"
 msgstr "<h3>Willkommen beim Energiewende-Chatbot!</h3>"

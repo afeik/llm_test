@@ -75,8 +75,8 @@ with streamlit_analytics2.track():
                     del st.session_state[key]
                 st.rerun()
 
-        st.markdown("<h4>Thank you for participating!</h4>", unsafe_allow_html=True)
-        st.write("If you have further questions, contact us:")
+        st.markdown(_("<h4>Thank you for participating!</h4>"), unsafe_allow_html=True)
+        st.write(_("If you have further questions, contact us:"))
         st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
         st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")
         st.write("Andreas Feik (ETH Zürich) anfeik@ethz.ch")
