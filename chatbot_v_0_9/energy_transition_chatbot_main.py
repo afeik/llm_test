@@ -16,17 +16,17 @@ from components.utils import set_background_color, language_dropdown
 anthropic_api_key = st.secrets["claude"]["claude_auth"]
 claude_client = anthropic.Client(api_key=anthropic_api_key)
 
-if "proficiency" not in st.session_state:
-    st.session_state.proficiency = None
+# if "proficiency" not in st.session_state:
+#     st.session_state.proficiency = None
 
-if "proficiency_selected" not in st.session_state:
-    st.session_state.proficiency_selected = False
+# if "proficiency_selected" not in st.session_state:
+#     st.session_state.proficiency_selected = False
 
-if "step" not in st.session_state:
-    st.session_state.step = None
+# if "step" not in st.session_state:
+#     st.session_state.step = None
 
-if "consent_given" not in st.session_state:
-    st.session_state.consent_given = False
+# if "consent_given" not in st.session_state:
+#     st.session_state.consent_given = False
 
 st.session_state.lang = "de"
 st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
