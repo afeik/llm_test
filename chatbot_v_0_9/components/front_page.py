@@ -56,7 +56,7 @@ def select_proficiency_level():
             st.session_state.proficiency_selected = True
             st.session_state.step = "initial_statement"
             st.session_state.consent_given = True
-            placeholder.empty()
+            placeholder.empty()  # Clear placeholder before rerun
             try:
                 init_db_communication()
                 update_proficiency()
