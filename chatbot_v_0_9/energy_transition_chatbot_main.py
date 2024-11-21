@@ -3,7 +3,7 @@ import streamlit as st
 import anthropic  # Importing the Claude AI client
 from pathlib import Path
 import streamlit_analytics2
-
+import os 
 # Import Page Components and Utils
 from components.user_ratings import get_initial_rating, get_final_rating
 from components.front_page import select_proficiency_level
@@ -21,6 +21,8 @@ st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 
 # Change background color to dark petrol (ETH Color)
 #set_background_color("#FFFFFF")
+st.write("Current Config:", st.config)
+st.write("Config File Path:", os.path.abspath(".streamlit/config.toml"))
 
 with streamlit_analytics2.track():
     ### Main App Flow ### 
