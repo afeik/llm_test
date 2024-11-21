@@ -20,7 +20,7 @@ st.session_state.lang = "de"
 st.session_state.locale_dir = Path(__file__).parent / "components" / "languages"
 
 # Change background color to dark petrol (ETH Color)
-set_background_color("#FFFFFF")
+#set_background_color("#FFFFFF")
 
 with streamlit_analytics2.track():
     ### Main App Flow ### 
