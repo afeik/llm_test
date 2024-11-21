@@ -65,7 +65,7 @@ def get_user_statement_and_summary(client):
                 with col2:
                     error_placeholder.markdown(
                         _(
-                            """<div style="background-color: #000000; color: gray; font-size: 13px; padding: 5px; text-align: center; border-radius: 5px;">
+                            """<div style="color: gray; font-size: 13px; padding: 5px; text-align: center; border-radius: 5px;">
                             Please enter at least """
                         ) + str(min_char_count) + _(
                             """ characters. You currently have: """

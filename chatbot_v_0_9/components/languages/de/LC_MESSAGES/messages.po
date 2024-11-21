@@ -134,11 +134,11 @@ msgstr ""
 
 #: components/user_summary.py:79
 msgid ""
-"<div style=\"background-color: #000000; color: gray; font-size: 13px; "
+"<div style=\"color: gray; font-size: 13px; "
 "padding: 5px; text-align: center; border-radius: 5px;\">\n"
 "                            Please enter at least "
 msgstr ""
-"<div style=\"background-color: #000000; color: gray; font-size: 13px; "
+"<div style=\"color: gray; font-size: 13px; "
 "padding: 5px; text-align: center; border-radius: 5px;\">\n"
 "                            Bitte geben Sie mindestens "
 
