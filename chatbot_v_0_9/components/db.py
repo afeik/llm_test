@@ -48,7 +48,7 @@ engine = create_engine(
     poolclass=QueuePool,
     pool_size=5,
     max_overflow=10,
-    pool_timeout=30,
+    pool_timeout=10,
     pool_recycle=1800  # Recycle connections every 30 minutes
 )
 Session = scoped_session(sessionmaker(bind=engine))
