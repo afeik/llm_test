@@ -55,6 +55,7 @@ def insert_db_message(message, role, message_type):
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during message insertion: {e}")
+        st.stop()
     finally:
         session.close()
 
@@ -87,6 +88,7 @@ def insert_final_rating(rating):
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during final rating insertion: {e}")
+        st.stop()
     finally:
         session.close()
 
@@ -103,5 +105,6 @@ def update_proficiency():
     except SQLAlchemyError as e:
         session.rollback()
         st.error(f"Database error during proficiency update: {e}")
+        st.stop()
     finally:
         session.close()
