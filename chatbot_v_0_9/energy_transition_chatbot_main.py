@@ -70,7 +70,7 @@ with streamlit_analytics2.track():
     if st.session_state.step == "completed":
         _, col = language_dropdown(ret_cols=True)
         with col:
-            if st.button("Try Again?"):
+            if st.button(_("Try Again?")):
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
                 st.rerun()
