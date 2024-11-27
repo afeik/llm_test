@@ -174,7 +174,7 @@ msgid ""
 "Transition:**"
 msgstr ""
 "**Bitte beschreiben Sie ein konkretes Anliegen, das Sie bezüglich der "
-"Energiestrategie haben:**"
+"Energiewende haben:**"
 
 #: components/user_summary.py:64
 msgid "Submit Concern"
@@ -183,7 +183,7 @@ msgstr "Anliegen einreichen"
 #: components/user_summary.py:70
 msgid "I'm worried the energy transition will increase electricity bills."
 msgstr ""
-"Ich befürchte, dass die Energiestrategie die Stromrechnungen erhöhen wird."
+"Ich befürchte, dass die Energiewende die Stromrechnungen erhöhen wird."
 
 #: components/user_summary.py:71
 msgid "I'm concerned about blackouts during the transition period."
