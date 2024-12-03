@@ -19,7 +19,7 @@ def get_chatbot_config():
     Loads and returns the chatbot configuration from a JSON file.
     """
     # Define the absolute path to the JSON file
-    file_path = Path(__file__).parent / "chatbot_config_v_0_9.json"
+    file_path = Path(__file__).parent / "chatbot_config.json"
 
     # Load the configuration
     with open(file_path, "r") as config_file:

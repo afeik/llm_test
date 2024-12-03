@@ -1,2 +1,6 @@
 [theme]
 base="light"
+
+[client]
+showErrorDetails = false
+toolbarMode = "viewer"

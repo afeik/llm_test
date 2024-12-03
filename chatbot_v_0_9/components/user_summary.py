@@ -150,18 +150,18 @@ def get_user_statement_and_summary(client):
 
             summary_response = client.messages.create(
                 model="claude-3-5-sonnet-20241022",
-                max_tokens=chatbot_config[st.session_state.proficiency][
+                max_tokens=chatbot_config["general"][
                     "summary_max_tokens"
                 ],
                 system=lang_prompt
-                + chatbot_config[st.session_state.proficiency]["summary_role"],
+                + chatbot_config["general"]["summary_role"],
                 messages=[
                     {
                         "role": "user",
                         "content": [{"type": "text", "text": statement}],
                     }
                 ],
-                temperature=chatbot_config[st.session_state.proficiency][
+                temperature=chatbot_config["general"][
                     "summary_temperature"
                 ],
             )
