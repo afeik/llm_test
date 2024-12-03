@@ -54,9 +54,9 @@ def claude_conversation(client):
             st.session_state.conversation_turns = 0
             st.session_state.messages = []
         if st.session_state.lang == "de":
-            lang_prompt = "Use German"
+            lang_prompt = "Use the German Language"
         else: 
-            lang_prompt = "Use English"
+            lang_prompt = "Use the English Language"
 
         # Start the conversation with a clarification prompt if it's the first turn
         if st.session_state.conversation_turns == 0 and "initial_clarification_sent" not in st.session_state:
