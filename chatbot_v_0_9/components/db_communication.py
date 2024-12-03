@@ -6,7 +6,7 @@ from sqlalchemy.sql import insert, update
 from sqlalchemy.exc import SQLAlchemyError
 
 # Import database session and table definitions from db.py
-from .db import Session, conversations, messages
+from .db import Session, conversations, messages, feedback
 from .utils import get_chatbot_config
 
 # Load chatbot configuration
@@ -141,3 +141,36 @@ def insert_full_conversation_details(age_group, gender, highest_degree, consent_
     finally:
         session.close()
 
+
+def insert_feedback(feedback_text, rating):
+    """
+    Insert feedback into the feedback table.
+    
+    Args:
+        feedback_text (str): The user's feedback.
+        rating (int): The user's star rating (optional).
+        
+    Returns:
+        None
+    """
+    if "conversation_id" not in st.session_state or st.session_state.conversation_id is None:
+        st.error("No active conversation. Please ensure a conversation is initialized.")
+        return
+
+    session = Session()
+    try:
+        session.execute(
+            insert(feedback).values(
+                conversation_id=st.session_state.conversation_id,  # Link feedback to the active conversation
+                feedback_text=feedback_text,
+                rating=rating,
+                timestamp=datetime.now()
+            )
+        )
+        session.commit()
+        st.success(_("Thank you for your feedback!"))
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during feedback insertion: {e}")
+    finally:
+        session.close()

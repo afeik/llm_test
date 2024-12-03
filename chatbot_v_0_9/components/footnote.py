@@ -1,6 +1,8 @@
 import streamlit as st
-from .utils import get_chatbot_config
+from .utils import get_chatbot_config, language_dropdown
 from pathlib import Path
+from .db_communication import insert_feedback
+import time 
 
 chatbot_config = get_chatbot_config() 
 
@@ -30,26 +32,60 @@ def show_impressum():
         markdown_content = file.read()
     st.markdown(markdown_content)
 
+@st.dialog("💬 Feedback")
+def show_feedback_popup():
+    """
+    Displays a feedback form with a star rating and text feedback input.
+    """ 
+    # Initialize session state for feedback inputs
+    if "feedback_rating" not in st.session_state:
+        st.session_state["feedback_rating"] = None
+    if "feedback_text" not in st.session_state:
+        st.session_state["feedback_text"] = ""
 
-def write_footnote(short_version=False): 
+    # Star rating using st.slider (adjust for demonstration)
+    feedback_rating = st.feedback(options="stars") 
+    if feedback_rating == None: 
+        feedback_rating = 0
+    st.session_state["feedback_rating"] = feedback_rating + 1
+    # Text area for detailed feedback
+    st.session_state["feedback_text"] = st.text_area(_("Please let us know what we can improve:"), key="feedback_text_area")
+
+    # Submit feedback button
+    if st.button(_("Submit Feedback")):
+        if st.session_state["feedback_text"]:
+            # Insert feedback into the database
+            insert_feedback(st.session_state["feedback_text"], st.session_state["feedback_rating"])
+            # Reset feedback inputs
+            st.session_state["feedback_rating"] = None
+            st.session_state["feedback_text"] = ""
+            time.sleep(2)
+            st.rerun()
+            
+        else:
+            st.error(_("Please enter your feedback."))
+        
+
+def write_footnote(short_version=False):
     """
     Displays a footer with a disclaimer and version information,
-    along with an Impressum button and partner logos.
+    along with Impressum and Feedback buttons and partner logos.
     
     Parameters:
     -----------
     short_version : bool, optional
         If True, displays a simplified version of the disclaimer.
     """
+
     # Define a container for the footer
     disclaimer_placeholder = st.container()
 
     with disclaimer_placeholder:
-        col1, col2 = st.columns([0.3, 0.7],vertical_alignment="top")  # Two columns for alignment
+        col1, col2, col3 = st.columns([0.2,0.2,0.6], vertical_alignment="top")  # Two columns for alignment
 
-        # Right column: Impressum button
+        # Left column: Impressum button
         with col1:
-            # CSS styling for button
+            # CSS styling for Impressum and Feedback buttons
             st.markdown(
                 """
                 <style>
@@ -57,20 +93,18 @@ def write_footnote(short_version=False):
                 .element-container:has(style) {
                     display: none;
                 }
-                #button-after {
+                #button-impressum {
                     display: none;
                 }
-                .element-container:has(#button-after) {
+                #button-feedback {
                     display: none;
                 }
-                
-                /* Style the button with a smaller font size */
-                .element-container:has(#button-after) + div button {
+                .element-container:has(#button-impressum) + div button {
                     background-color: transparent;
                     color: gray;
                     border: none;
                     padding: 0;
-                    font-size: 13px;
+                    font-size: 10px;
                     text-decoration: underline;
                     cursor: pointer;
                 }
@@ -79,14 +113,50 @@ def write_footnote(short_version=False):
                 unsafe_allow_html=True,
             )
 
-            # Invisible span to target the button
-            st.markdown('<span id="button-after"> </span>', unsafe_allow_html=True)
+            # Invisible spans to target buttons
+            st.markdown('<span id="button-impressum"> </span>', unsafe_allow_html=True)
 
             # Visible Impressum button
             current_version = chatbot_config["version"]
-
             if st.button("V" + current_version + ", Impressum"):
                 show_impressum()
 
+        if short_version == False: 
+            # Right column: Feedback button
+            with col2:
+                            # CSS styling for Impressum and Feedback buttons
+                st.markdown(
+                    """
+                    <style>
+                    /* Hide specific elements */
+                    .element-container:has(style) {
+                        display: none;
+                    }
+                    #button-impressum {
+                        display: none;
+                    }
+                    #button-feedback {
+                        display: none;
+                    }
+                    .element-container:has(#button-feedback) + div button {
+                        background-color: transparent;
+                        color: gray;
+                        border: none;
+                        padding: 0;
+                        font-size: 10px;
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # Invisible spans to target buttons
+                st.markdown('<span id="button-feedback"> </span>', unsafe_allow_html=True)
+
+                # Visible Impressum button
+                if st.button("💬 Feedback"):
+                    show_feedback_popup()
 
         

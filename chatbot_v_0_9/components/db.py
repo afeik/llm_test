@@ -4,10 +4,12 @@ from datetime import datetime
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import QueuePool
+from .utils import get_db_uri
 import streamlit as st
 
+
 # Load database URI from Streamlit secrets
-db_uri = st.secrets["neon_db"]["db_uri"]
+db_uri = get_db_uri()
 
 # Ensure that db_uri includes 'sslmode=require'
 if 'sslmode' not in db_uri:
@@ -55,6 +57,17 @@ messages = Table(
     Column('message_type', String(50))
 )
 
+# Define the feedback table
+feedback = Table(
+    'feedback', metadata,
+    Column('feedback_id', Integer, primary_key=True, autoincrement=True),
+    Column('conversation_id', Integer, ForeignKey('conversations.conversation_id'), nullable=True),
+    Column('feedback_text', Text, nullable=False),  # User feedback content
+    Column('rating', Integer, nullable=True),  # Optional rating (1-5)
+    Column('timestamp', TIMESTAMP, default=datetime.now, nullable=False)  # Feedback submission time
+)
+
+
 # Initialize Database Engine and Session Factory
 engine = create_engine(
     db_uri,
@@ -62,9 +75,11 @@ engine = create_engine(
     poolclass=QueuePool,
     pool_size=5,
     max_overflow=10,
-    pool_timeout=500,
+    pool_timeout=1000,
     pool_recycle=1800  # Recycle connections every 30 minutes
 )
+# Create all tables in the database
+metadata.create_all(engine)
 Session = scoped_session(sessionmaker(bind=engine))
 
 

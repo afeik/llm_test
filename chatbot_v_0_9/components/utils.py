@@ -5,15 +5,30 @@ import base64
 import os
 from pathlib import Path
 import gettext
-import requests
-import uuid
-
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
     base_dir = os.path.dirname(__file__)
     return os.path.join(base_dir, "images", image_name)
 
+# Function to get API key from secrets or environment variables
+def get_api_key():
+    # Try to get the API key from Streamlit secrets
+    try:
+        return st.secrets["claude"]["claude_auth"]
+    except KeyError:
+        # Fall back to environment variables
+        return os.getenv("CLAUDE_AUTH")
+
+# Function to get the database URI from secrets or environment variables
+def get_db_uri():
+    # Try to get the DB URI from Streamlit secrets
+    try:
+        return st.secrets["neon_db"]["db_uri"]
+    except KeyError:
+        # Fall back to environment variables
+        return os.getenv("NEON_DB_URI")
+    
 def get_chatbot_config():
     """
     Loads and returns the chatbot configuration from a JSON file.
@@ -127,35 +142,3 @@ def language_dropdown(ret_cols=False):
         return _, col3
     else: 
         return _
-
-
-
-# def send_ga_event(event_name, event_params=None):
-#     """
-#     Send events to Google Analytics using the Measurement Protocol.
-#     """
-#     measurement_id = st.secrets["google_analytics"]["measurement_id"]
-#     api_secret = st.secrets["google_analytics"]["api_secret"]
-#     client_id = st.session_state.get("client_id", str(uuid.uuid4()))
-
-#     if "client_id" not in st.session_state:
-#         st.session_state["client_id"] = client_id
-
-#     url = f"https://www.google-analytics.com/mp/collect?measurement_id={measurement_id}&api_secret={api_secret}"
-
-#     payload = {
-#         "client_id": client_id,
-#         "events": [
-#             {
-#                 "name": event_name,
-#                 "params": event_params or {}
-#             }
-#         ]
-#     }
-
-#     response = requests.post(url, json=payload)
-
-#     if response.status_code != 204:
-#         st.error(f"Failed to send event: {response.text}")
-
-

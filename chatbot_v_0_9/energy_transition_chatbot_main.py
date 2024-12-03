@@ -9,7 +9,7 @@ from components.front_page import select_proficiency_level
 from components.ai_conversation import claude_conversation
 from components.footnote import write_footnote
 from components.user_summary import get_user_statement_and_summary
-from components.utils import set_background_color, language_dropdown
+from components.utils import language_dropdown, get_api_key
 
 # Initialize session state
 if "lang" not in st.session_state:
@@ -36,8 +36,12 @@ if "conversation_id" not in st.session_state:
 
 
 # Initialize Claude client
-anthropic_api_key = st.secrets["claude"]["claude_auth"]
-claude_client = anthropic.Client(api_key=anthropic_api_key)
+anthropic_api_key = get_api_key()
+
+if anthropic_api_key:
+    claude_client = anthropic.Client(api_key=anthropic_api_key)
+else:
+    st.error("Connection to Claude API failed.")
 
 with streamlit_analytics2.track():
     if st.session_state.step == "select_proficiency":
@@ -80,4 +84,4 @@ with streamlit_analytics2.track():
         st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
         st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")
         st.write("Andreas Feik (ETH Zürich) anfeik@ethz.ch")
-        write_footnote(short_version=True)
+        write_footnote(short_version=False)

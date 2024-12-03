@@ -101,4 +101,4 @@ def get_final_rating():
             st.session_state.step = "completed"
             st.rerun()
 
-    write_footnote(short_version=True)
+    write_footnote(short_version=False)

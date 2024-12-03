@@ -176,6 +176,22 @@ msgstr ""
 "**Bitte beschreiben Sie ein konkretes Anliegen, das Sie bezüglich der "
 "Energiewende haben:**"
 
+#: components/footnote.py:46
+msgid "Please let us know what we can improve:"
+msgstr "Bitte lassen Sie uns wissen, was wir verbessern können:"
+
+#: components/footnote.py:49
+msgid "Submit Feedback"
+msgstr "Feedback absenden"
+
+#: components/footnote.py:54
+msgid "Please enter your feedback."
+msgstr "Geben Sie bitte ihr Feedback ein."
+
+#: components/db_communiation.py:171
+msgid "Thank you for your feedback!"
+msgstr "Vielen Dank für Ihr Feedback!"
+
 #: components/user_summary.py:64
 msgid "Submit Concern"
 msgstr "Anliegen einreichen"
