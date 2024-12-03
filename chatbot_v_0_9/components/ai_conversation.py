@@ -54,7 +54,7 @@ def claude_conversation(client):
             st.session_state.conversation_turns = 0
             st.session_state.messages = []
         if st.session_state.lang == "de":
-            lang_prompt = "Use the German Language"
+            lang_prompt = "Verwende die Deutsche Sprache."
         else: 
             lang_prompt = "Use the English Language"
 

@@ -144,9 +144,9 @@ def get_user_statement_and_summary(client):
             # Clear the error message if any
             error_placeholder.empty()
             if st.session_state.lang == "de":
-                lang_prompt = "Use German"
+                lang_prompt = "Verwende die Deutsche Sprache."
             else:
-                lang_prompt = "Use English"
+                lang_prompt = "Use the English Language."
 
             summary_response = client.messages.create(
                 model="claude-3-5-sonnet-20241022",
