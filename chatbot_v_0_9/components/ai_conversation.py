@@ -136,4 +136,4 @@ def claude_conversation(client):
             st.session_state.messages.append({"role": "assistant", "content": response_text})  
             st.session_state.conversation_turns += 1
 
-    write_footnote(short_version=True)
+    write_footnote(short_version=False)
