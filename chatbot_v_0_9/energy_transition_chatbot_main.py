@@ -1,7 +1,6 @@
 import streamlit as st
 import anthropic
 from pathlib import Path
-import streamlit_analytics2
 
 # Import components
 from components.user_ratings import get_initial_rating, get_final_rating
@@ -43,45 +42,45 @@ if anthropic_api_key:
 else:
     st.error("Connection to Claude API failed.")
 
-with streamlit_analytics2.track():
-    if st.session_state.step == "select_proficiency":
-        select_proficiency_level()
 
-    if st.session_state.step == "initial_statement":
-        try:
-            get_user_statement_and_summary(claude_client)
-        except Exception as e:
-            st.error(f"Error in initial statement: {e}")
+if st.session_state.step == "select_proficiency":
+    select_proficiency_level()
 
-    if st.session_state.step == "initial_rating":
-        try:
-            get_initial_rating()
-        except Exception as e:
-            st.error(f"Error in initial rating: {e}")
+if st.session_state.step == "initial_statement":
+    try:
+        get_user_statement_and_summary(claude_client)
+    except Exception as e:
+        st.error(f"Error in initial statement: {e}")
 
-    if st.session_state.step == "conversation":
-        try:
-            claude_conversation(claude_client)
-        except Exception as e:
-            st.error(f"Error in conversation: {e}")
+if st.session_state.step == "initial_rating":
+    try:
+        get_initial_rating()
+    except Exception as e:
+        st.error(f"Error in initial rating: {e}")
 
-    if st.session_state.step == "final_rating":
-        try:
-            get_final_rating()
-        except Exception as e:
-            st.error(f"Error in final rating: {e}")
+if st.session_state.step == "conversation":
+    try:
+        claude_conversation(claude_client)
+    except Exception as e:
+        st.error(f"Error in conversation: {e}")
 
-    if st.session_state.step == "completed":
-        _, col = language_dropdown(ret_cols=True)
-        with col:
-            if st.button(_("Try Again?")):
-                for key in list(st.session_state.keys()):
-                    del st.session_state[key]
-                st.rerun()
+if st.session_state.step == "final_rating":
+    try:
+        get_final_rating()
+    except Exception as e:
+        st.error(f"Error in final rating: {e}")
 
-        st.markdown(_("<h4>Thank you for participating!</h4>"), unsafe_allow_html=True)
-        st.write(_("If you have further questions, contact us:"))
-        st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
-        st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")
-        st.write("Andreas Feik (ETH Zürich) anfeik@ethz.ch")
-        write_footnote(short_version=False)
+if st.session_state.step == "completed":
+    _, col = language_dropdown(ret_cols=True)
+    with col:
+        if st.button(_("Try Again?")):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+
+    st.markdown(_("<h4>Thank you for participating!</h4>"), unsafe_allow_html=True)
+    st.write(_("If you have further questions, contact us:"))
+    st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
+    st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")
+    st.write("Andreas Feik (ETH Zürich) anfeik@ethz.ch")
+    write_footnote(short_version=False)
