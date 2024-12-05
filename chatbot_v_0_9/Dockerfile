@@ -20,4 +20,5 @@ EXPOSE 8501
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
 # Command to run the Streamlit app
-CMD ["streamlit", "run", "energy_transition_chatbot_main.py", "--server.port=${PORT:-8501}", "--server.enableCORS=false"]
+CMD ["sh", "-c", "streamlit run energy_transition_chatbot_main.py --server.port=${PORT:-8501} --server.enableCORS=false"]
+
