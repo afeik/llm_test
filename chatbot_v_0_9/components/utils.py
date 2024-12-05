@@ -7,41 +7,49 @@ from pathlib import Path
 import gettext
 from google.cloud import secretmanager
 
-def get_secret(secret_name):
-    client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/youtubaddon2/secrets/{secret_name}/versions/latest"
-    response = client.access_secret_version(name=name)
-    return response.payload.data.decode("UTF-8")
 
-# Function to get the absolute path to the image
+# Function to access secrets from Google Secret Manager
+def get_secret(secret_name):
+    try:
+        client = secretmanager.SecretManagerServiceClient()
+        name = f"projects/youtubaddon2/secrets/{secret_name}/versions/latest"
+        response = client.access_secret_version(name=name)
+        return response.payload.data.decode("UTF-8")
+    except Exception as e:
+        st.error(f"Error accessing secret {secret_name}: {e}")
+        raise
+
+# Function to get the absolute path to an image
 def get_image_path(image_name):
     base_dir = os.path.dirname(__file__)
     return os.path.join(base_dir, "images", image_name)
 
-# Function to get API key from secrets or environment variables
+# Function to get API key
 def get_api_key():
-    # Try to get the API key from Streamlit secrets
     try:
+        # Try to get from Streamlit secrets
         return st.secrets["claude"]["claude_auth"]
     except KeyError:
-        try:
-            # Fall back to environment variables
+        # Try to get from environment variables
+        if "claude_auth" in os.environ:
             return os.getenv("claude_auth")
-        except: 
+        # Fallback to Google Secret Manager
+        else:
             return get_secret("claude_auth")
-    
 
-# Function to get the database URI from secrets or environment variables
+# Function to get the database URI
 def get_db_uri():
-    # Try to get the DB URI from Streamlit secrets
     try:
+        # Try to get from Streamlit secrets
         return st.secrets["neon_db"]["db_uri"]
     except KeyError:
-        try:
-            # Fall back to environment variables
+        # Try to get from environment variables
+        if "db_uri" in os.environ:
             return os.getenv("db_uri")
-        except: 
-            return get_secret("db_uri") 
+        # Fallback to Google Secret Manager
+        else:
+            return get_secret("db_uri")
+
     
 def get_chatbot_config():
     """
