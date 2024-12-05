@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy the requirements file (already in the same folder as Dockerfile)
-COPY requirements.txt /app/requirements.txt
+COPY /requirements.txt /app/requirements.txt
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
