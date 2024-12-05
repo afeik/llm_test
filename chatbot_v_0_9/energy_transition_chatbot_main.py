@@ -47,28 +47,20 @@ if st.session_state.step == "select_proficiency":
     select_proficiency_level()
 
 if st.session_state.step == "initial_statement":
-    try:
-        get_user_statement_and_summary(claude_client)
-    except Exception as e:
-        st.error(f"Error in initial statement: {e}")
+    get_user_statement_and_summary(claude_client)
+
 
 if st.session_state.step == "initial_rating":
-    try:
-        get_initial_rating()
-    except Exception as e:
-        st.error(f"Error in initial rating: {e}")
+    get_initial_rating()
+
 
 if st.session_state.step == "conversation":
-    try:
-        claude_conversation(claude_client)
-    except Exception as e:
-        st.error(f"Error in conversation: {e}")
+    claude_conversation(claude_client)
+
 
 if st.session_state.step == "final_rating":
-    try:
-        get_final_rating()
-    except Exception as e:
-        st.error(f"Error in final rating: {e}")
+    get_final_rating()
+
 
 if st.session_state.step == "completed":
     _, col = language_dropdown(ret_cols=True)
