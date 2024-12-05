@@ -5,6 +5,13 @@ import base64
 import os
 from pathlib import Path
 import gettext
+from google.cloud import secretmanager
+
+def get_secret(secret_name):
+    client = secretmanager.SecretManagerServiceClient()
+    name = f"projects/youtubaddon2/secrets/{secret_name}/versions/latest"
+    response = client.access_secret_version(name=name)
+    return response.payload.data.decode("UTF-8")
 
 # Function to get the absolute path to the image
 def get_image_path(image_name):
@@ -17,8 +24,12 @@ def get_api_key():
     try:
         return st.secrets["claude"]["claude_auth"]
     except KeyError:
-        # Fall back to environment variables
-        return os.getenv("CLAUDE_AUTH")
+        try:
+            # Fall back to environment variables
+            return os.getenv("claude_auth")
+        except: 
+            return get_secret("claude_auth")
+    
 
 # Function to get the database URI from secrets or environment variables
 def get_db_uri():
@@ -26,8 +37,11 @@ def get_db_uri():
     try:
         return st.secrets["neon_db"]["db_uri"]
     except KeyError:
-        # Fall back to environment variables
-        return os.getenv("NEON_DB_URI")
+        try:
+            # Fall back to environment variables
+            return os.getenv("db_uri")
+        except: 
+            return get_secret("db_uri") 
     
 def get_chatbot_config():
     """
