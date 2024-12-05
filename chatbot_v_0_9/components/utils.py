@@ -16,7 +16,7 @@ def get_secret(secret_name):
         response = client.access_secret_version(name=name)
         return response.payload.data.decode("UTF-8")
     except Exception as e:
-        st.error(f"Error accessing secret {secret_name} from Google Secret Manager: {e}")
+        st.error(f"Error with secret {secret_name} from Google Secret Manager: {e}")
         raise
 
 # Function to get the absolute path to an image
