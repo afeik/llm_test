@@ -16,7 +16,7 @@ def get_secret(secret_name):
         response = client.access_secret_version(name=name)
         return response.payload.data.decode("UTF-8")
     except Exception as e:
-        st.error(f"Error accessing secret {secret_name}: {e}")
+        st.error(f"Error accessing secret {secret_name} from Google Secret Manager: {e}")
         raise
 
 # Function to get the absolute path to an image
@@ -27,28 +27,36 @@ def get_image_path(image_name):
 # Function to get API key
 def get_api_key():
     try:
-        # Try to get from Streamlit secrets
-        return st.secrets["claude"]["claude_auth"]
-    except KeyError:
-        # Try to get from environment variables
-        if "claude_auth" in os.environ:
-            return os.getenv("claude_auth")
-        # Fallback to Google Secret Manager
-        else:
-            return get_secret("claude_auth")
+        # Try to get from Google Secret Manager first
+        return get_secret("claude_auth")
+    except Exception:
+        try:
+            # Fall back to Streamlit secrets
+            return st.secrets["claude"]["claude_auth"]
+        except KeyError:
+            # Lastly, try to get from environment variables
+            if "claude_auth" in os.environ:
+                return os.getenv("claude_auth")
+            else:
+                st.error("API key for 'claude_auth' not found in any source.")
+                raise ValueError("API key not found.")
 
 # Function to get the database URI
 def get_db_uri():
     try:
-        # Try to get from Streamlit secrets
-        return st.secrets["neon_db"]["db_uri"]
-    except KeyError:
-        # Try to get from environment variables
-        if "db_uri" in os.environ:
-            return os.getenv("db_uri")
-        # Fallback to Google Secret Manager
-        else:
-            return get_secret("db_uri")
+        # Try to get from Google Secret Manager first
+        return get_secret("db_uri")
+    except Exception:
+        try:
+            # Fall back to Streamlit secrets
+            return st.secrets["neon_db"]["db_uri"]
+        except KeyError:
+            # Lastly, try to get from environment variables
+            if "db_uri" in os.environ:
+                return os.getenv("db_uri")
+            else:
+                st.error("Database URI for 'db_uri' not found in any source.")
+                raise ValueError("Database URI not found.")
 
     
 def get_chatbot_config():
