@@ -69,7 +69,7 @@ def insert_initial_rating(rating):
         session.commit()
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during initial rating insertion: {e}")
+        #st.error(f"Database error during initial rating insertion: {e}")
     finally:
         session.close()
 
@@ -85,7 +85,7 @@ def insert_final_rating(rating):
         session.commit()
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during final rating insertion: {e}")
+        #st.error(f"Database error during final rating insertion: {e}")
     finally:
         session.close()
 
@@ -101,7 +101,7 @@ def update_proficiency():
         session.commit()
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during proficiency update: {e}")
+        #st.error(f"Database error during proficiency update: {e}")
     finally:
         session.close()
 
@@ -137,7 +137,7 @@ def insert_full_conversation_details(age_group, gender, highest_degree, consent_
         session.commit()
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during full conversation details insertion: {e}")
+        #st.error(f"Database error during full conversation details insertion: {e}")
     finally:
         session.close()
 
@@ -171,6 +171,6 @@ def insert_feedback(feedback_text, rating):
         st.success(_("Thank you for your feedback!"))
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during feedback insertion: {e}")
+        #st.error(f"Database error during feedback insertion: {e}")
     finally:
         session.close()

@@ -26,12 +26,12 @@
       "en": {
         "page_title": "Welcome to the Solar Energy Chatbot!",
         "slider_title": "How would you rate your knowledge about solar energy?",
-        "consent_text": "I acknowledge that data collected during this session will be securely stored and used solely for research purposes at ETH Zurich."
+        "consent_text": "I acknowledge that the data collected during this session will be securely stored and used solely for research purposes at ETH Zurich."
       },
       "de": {
         "page_title": "Willkommen beim Solarenergie-Chatbot!",
         "slider_title": "Wie würden Sie Ihr Wissen über Solarenergie einschätzen?",
-        "consent_text": "Ich bestätige, dass die in dieser Sitzung gesammelten Daten sicher gespeichert und ausschließlich für Forschungszwecke an der ETH Zürich verwendet werden."
+        "consent_text": "Ich nehme zur Kenntnis, dass die in dieser Sitzung gesammelten Daten sicher gespeichert und ausschließlich für Forschungszwecke an der ETH Zürich verwendet werden."
       }
     },
   "concerns_page": {
@@ -62,5 +62,6 @@
     ]
   },
   "disclaimer_en": "Please be aware that AI chatbots can make mistakes.",
-  "disclaimer_de": "Bitte beachten Sie, dass KI-Chatbots Fehler machen können."
+  "disclaimer_de": "Bitte beachten Sie, dass KI-Chatbots Fehler machen können.",
+  "usecase": "solar_project"
 }
