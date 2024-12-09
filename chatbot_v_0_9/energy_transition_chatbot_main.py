@@ -33,7 +33,7 @@ if "consent_given" not in st.session_state:
 if "conversation_id" not in st.session_state:
     st.session_state.conversation_id = None  # Or set a default value like ""
 
-
+st.set_page_config("Solar Energy Chatbot",":robot_face:")
 # Initialize Claude client
 anthropic_api_key = get_api_key()
 
