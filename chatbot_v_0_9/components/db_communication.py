@@ -53,7 +53,7 @@ def insert_db_message(message, role, message_type):
         session.commit()
     except SQLAlchemyError as e:
         session.rollback()
-        st.error(f"Database error during message insertion: {e}")
+        #st.error(f"Database error during message insertion: {e}")
     finally:
         session.close()
 

@@ -50,7 +50,7 @@ def get_initial_rating():
                 col1, col2 = st.columns([1, 1])  # Adjust proportions as necessary
 
                 with col1:
-                    st.write(_("How confident are you that this statement is true?"))
+                    st.write(_("How confident are you that this statement is correct?"))
 
                 with col2:
                     pass
@@ -92,7 +92,7 @@ def get_final_rating():
             0, 100,
             key="final_rating_slider"
         )
-        st.write(_("After discussing, how confident are you now that this statement is true?"))
+        st.write(_("After discussing, how confident are you now that this statement is correct?"))
         if st.button(_("Submit Final Rating"), key="submit_final_rating"):
             #send_ga_event("final_rating")
             insert_final_rating(st.session_state.final_rating_slider)

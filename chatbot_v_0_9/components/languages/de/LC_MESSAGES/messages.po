@@ -46,6 +46,11 @@ msgstr ""
 "gespeichert und ausschließlich für Forschungszwecke an der ETH Zürich "
 "verwendet werden."
 
+#: components/front_page.py:38
+msgid "Start Chatbot"
+msgstr "Chatbot Starten"
+
+
 #: components/ai_conversation.py:40
 msgid "End Conversation"
 msgstr "Gespräch beenden"
@@ -59,8 +64,8 @@ msgid "<h4>AI Summary of your concern:</h4>"
 msgstr "<h4>KI-Zusammenfassung Ihres Anliegens:</h4>"
 
 #: components/user_ratings.py:53
-msgid "How confident are you that this statement is true?"
-msgstr "Wie sicher sind Sie, dass diese Aussage wahr ist?"
+msgid "How confident are you that this statement is correct?"
+msgstr "Wie sicher sind Sie, dass diese Aussage korrekt ist?"
 
 #: components/user_ratings.py:58
 msgid "Submit Initial Rating"
@@ -72,9 +77,9 @@ msgstr "<h4>Ihr ursprüngliches Anliegen wurde wie folgt zusammengefasst:</h4>"
 
 #: components/user_ratings.py:95
 msgid ""
-"After discussing, how confident are you now that this statement is true?"
+"After discussing, how confident are you now that this statement is correct?"
 msgstr ""
-"Nach der Diskussion, wie sicher sind Sie jetzt, dass diese Aussage wahr ist?"
+"Nach der Diskussion, wie sicher sind Sie jetzt, dass diese Aussage korrekt ist?"
 
 #: components/user_ratings.py:96
 msgid "Submit Final Rating"
@@ -193,7 +198,7 @@ msgid "Thank you for your feedback!"
 msgstr "Vielen Dank für Ihr Feedback!"
 
 #: components/user_summary.py:64
-msgid "Submit Concern"
+msgid "Submit Statement"
 msgstr "Anliegen einreichen"
 
 #: components/user_summary.py:70

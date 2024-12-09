@@ -11,13 +11,19 @@ def get_user_statement_and_summary(client):
     and displays the summary for user confirmation, along with additional mandatory user details.
     """
     _ = language_dropdown()
+    lang = st.session_state.lang
+
+    # Load titles and concerns from the configuration file
+    page_title = chatbot_config["titles"]["concerns_page"][lang]["page_title"]
+    text_area_title = chatbot_config["titles"]["concerns_page"][lang]["text_area_title"]
+    example_concerns = chatbot_config["concerns"][lang]
 
     # Initialize session state variables
     default_states = {
         "age_group": "Select",
         "gender": "Select",
         "highest_degree": "Select",
-        "lang": "en",
+        "lang": lang,
         "summary": None,
         "statement": None,
         "step": None,
@@ -27,66 +33,41 @@ def get_user_statement_and_summary(client):
             st.session_state[key] = value
 
     # Page title
-    st.markdown(_("<h4>Switzerland's Energy Transition</h4>"), unsafe_allow_html=True)
+    st.markdown(f"<h4>{page_title}</h4>", unsafe_allow_html=True)
 
     # Dropdown options
-    age_group_label = "Age Group:"
+    age_group_label = _("Age Group:")
+    gender_label = _("Gender:")
+    degree_label = _("Highest Degree Achieved:")
     age_groups = [
-        "Select", "Under 18", "18-24", "25-34", "35-44", "45-54", "55-64",
-        "65 and older", "Prefer not to say"
+        _("Select"), _("Under 18"), _("18-24"), _("25-34"),
+        _("35-44"), _("45-54"), _("55-64"), _("65 and older"), _("Prefer not to say")
     ]
-    gender_label = "Gender:"
-    genders = ["Select", "Male", "Female", "Other", "Prefer not to say"]
-    degree_label = "Highest Degree Achieved:"
-    degrees = ["Select", "High School", "Bachelor's", "Master's", "PhD", "Other"]
+    genders = [_("Select"), _("Male"), _("Female"), _("Other"), _("Prefer not to say")]
+    degrees = [_("Select"), _("High School"), _("Bachelor's"), _("Master's"), _("PhD"), _("Other")]
 
-    # Selections with unique keys for each dropdown
-    st.session_state.age_group = st.selectbox(
-        _(age_group_label), [_("Select"), _("Under 18"), _("18-24"), _("25-34"),
-        _("35-44"), _("45-54"), _("55-64"), _("65 and older"), _("Prefer not to say")],
-        key="age_group_selectbox"
-    )
-    st.session_state.gender = st.selectbox(
-        _(gender_label), [_("Select"), _("Male"), _("Female"), _("Other"), _("Prefer not to say")],
-        key="gender_selectbox"
-    )
-    st.session_state.highest_degree = st.selectbox(
-        _(degree_label), [_("Select"), _("High School"), _("Bachelor's"),
-        _("Master's"), _("PhD"), _("Other")],
-        key="degree_selectbox"
-    )
+    st.session_state.age_group = st.selectbox(age_group_label, age_groups, key="age_group_selectbox")
+    st.session_state.gender = st.selectbox(gender_label, genders, key="gender_selectbox")
+    st.session_state.highest_degree = st.selectbox(degree_label, degrees, key="degree_selectbox")
 
     # Text area for the user statement
     statement = st.text_area(
-        _(
-            "**Please describe a concrete concern that you have about the Energy Transition:**"
-        ),
-        height=200, key="user_statement_textarea"
+        f"{text_area_title}",
+        height=200,
+        key="user_statement_textarea"
     )
 
     # Columns for submit button and error placeholder
     col1, col2 = st.columns([1.5, 3.6])
     with col1:
-        submit_button = st.button(_("Submit Concern"), key="submit_button")
+        submit_button = st.button(_("Submit Statement"), key="submit_button")
     with col2:
         error_placeholder = st.empty()
-
-    # Example concerns
-    example_concerns = [
-        _("I'm worried the energy transition will increase electricity bills."),
-        _("I'm concerned about blackouts during the transition period."),
-        _("I fear job losses in traditional energy sectors."),
-        _("I'm worried about environmental impacts of new infrastructure."),
-        _("I feel the transition is moving too fast and disrupting daily life."),
-    ]
 
     # Expandable section for example concerns
     with st.expander(_("Need inspiration? Click here to see example concerns.")):
         for concern in example_concerns:
-            st.markdown(
-                f"<p style='font-size:14px;color:grey;margin-bottom:10px;'>- {concern}</p>",
-                unsafe_allow_html=True
-            )
+            st.markdown(f"<p style='font-size:14px;color:grey;margin-bottom:10px;'>- {concern}</p>", unsafe_allow_html=True)
 
     # Validation
     min_char_count = 30
@@ -102,7 +83,7 @@ def get_user_statement_and_summary(client):
         if not fields_filled:
             # Error message for incomplete fields
             with col2:
-                error_message = _("<div style='color: red; font-size: 13px;'>")
+                error_message = "<div style='color: red; font-size: 13px;'>"
                 if st.session_state.age_group == _("Select"):
                     error_message += _("Please select your age group.")
                 elif st.session_state.gender == _("Select"):
@@ -124,7 +105,7 @@ def get_user_statement_and_summary(client):
             error_placeholder.empty()
 
             # Language prompt
-            lang_prompt = "Use the English Language." if st.session_state.lang != "de" else "Verwende die Deutsche Sprache."
+            lang_prompt = "Use the English Language." if lang == "en" else "Verwende die Deutsche Sprache."
 
             # Call to the Claude API
             try:
@@ -166,3 +147,6 @@ def get_user_statement_and_summary(client):
 
     # Footer
     write_footnote()
+
+
+
