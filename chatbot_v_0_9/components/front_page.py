@@ -22,46 +22,57 @@ def select_proficiency_level():
     if "conversation_id" not in st.session_state:
         st.session_state.conversation_id = None
 
-    placeholder = st.empty()
+    # Display the proficiency selection page
+    st.markdown(_("<h3>Welcome to the Energy Transition Chatbot!</h3>"), unsafe_allow_html=True)
 
-    with placeholder.container():
-        st.markdown(_("<h3>Welcome to the Energy Transition Chatbot!</h3>"), unsafe_allow_html=True)
+    # Load and display the image
+    image_path = get_image_path("energy_transition_switzerland.png")
+    image = Image.open(image_path)
+    st.image(image, use_column_width=True)
 
-        # Load and display the image
+    # Slider for proficiency rating
+    if "proficiency_rating" not in st.session_state:
+        st.session_state.proficiency_rating = 0
 
-        image_path = get_image_path("energy_transition_switzerland.png")
-        image = Image.open(image_path)
-        st.image(image, use_column_width=True)
+    st.session_state.proficiency_rating = st.slider(
+        _("How would you rate your knowledge about the energy transition?"),
+        0, 100,
+        value=st.session_state.proficiency_rating,
+        key="proficiency_slider"
+    )
 
-        # Slider for proficiency rating
-        proficiency_rating = st.slider(
-            _("How would you rate your knowledge about the energy transition?"), 0, 100
-        )
+    # Checkbox for consent
+    if "consent_given" not in st.session_state:
+        st.session_state.consent_given = False
 
-        # Checkbox for consent
-        consent_given = st.checkbox(
-            _("I acknowledge that data collected during this session will be securely stored and used solely for research purposes at ETH Zurich.")
-        )
+    st.session_state.consent_given = st.checkbox(
+        _("I acknowledge that data collected during this session will be securely stored and used solely for research purposes at ETH Zurich."),
+        value=st.session_state.consent_given,
+        key="consent_checkbox"
+    )
 
-        # Determine proficiency level
-        if 0 <= proficiency_rating <= 33:
-            st.session_state.proficiency = "beginner"
-        elif 34 <= proficiency_rating <= 66:
-            st.session_state.proficiency = "intermediate"
-        elif 67 <= proficiency_rating <= 100:
-            st.session_state.proficiency = "expert"
+    # Determine proficiency level
+    if 0 <= st.session_state.proficiency_rating <= 33:
+        st.session_state.proficiency = "beginner"
+    elif 34 <= st.session_state.proficiency_rating <= 66:
+        st.session_state.proficiency = "intermediate"
+    elif 67 <= st.session_state.proficiency_rating <= 100:
+        st.session_state.proficiency = "expert"
 
-        # Start Chatbot button
-        if st.button("Start Chatbot", disabled=not consent_given):
-            st.session_state.proficiency_selected = True
-            st.session_state.step = "initial_statement"
-            st.session_state.consent_given = True
-            placeholder.empty()  # Clear placeholder before rerun
-            try:
-                init_db_communication()
-                update_proficiency()
-            except Exception as e:
-                st.error(f"An error occurred during initialization: {e}")
-            st.rerun()
+    # Start Chatbot button
+    if st.button("Start Chatbot", disabled=not st.session_state.consent_given, key="start_chatbot_button"):
+        st.session_state.proficiency_selected = True
+        st.session_state.step = "initial_statement"
+        st.session_state.consent_given = True
 
-        write_footnote(short_version=True)
+        try:
+            init_db_communication()
+            update_proficiency()
+        except Exception as e:
+            st.error(f"An error occurred during initialization: {e}")
+
+        # Trigger a rerun for the next step
+        st.rerun()
+
+    # Footer
+    write_footnote(short_version=True)

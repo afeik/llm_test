@@ -11,85 +11,67 @@ def get_user_statement_and_summary(client):
     and displays the summary for user confirmation, along with additional mandatory user details.
     """
     _ = language_dropdown()
-    placeholder = st.empty()
-    with placeholder.container():
-        st.markdown(
-            _("<h4>Switzerland's Energy Transition</h4>"),
-            unsafe_allow_html=True
-        )
 
-    # Define original strings as variables
+    # Initialize session state variables
+    default_states = {
+        "age_group": "Select",
+        "gender": "Select",
+        "highest_degree": "Select",
+        "lang": "en",
+        "summary": None,
+        "statement": None,
+        "step": None,
+    }
+    for key, value in default_states.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+    # Page title
+    st.markdown(_("<h4>Switzerland's Energy Transition</h4>"), unsafe_allow_html=True)
+
+    # Dropdown options
     age_group_label = "Age Group:"
     age_groups = [
-        "Select",
-        "Under 18",
-        "18-24",
-        "25-34",
-        "35-44",
-        "45-54",
-        "55-64",
-        "65 and older",
-        "Prefer not to say",
+        "Select", "Under 18", "18-24", "25-34", "35-44", "45-54", "55-64",
+        "65 and older", "Prefer not to say"
     ]
-
     gender_label = "Gender:"
     genders = ["Select", "Male", "Female", "Other", "Prefer not to say"]
-
     degree_label = "Highest Degree Achieved:"
     degrees = ["Select", "High School", "Bachelor's", "Master's", "PhD", "Other"]
 
-    # Translate the options
-    translated_age_groups = [_(option) for option in age_groups]
-    translated_genders = [_(option) for option in genders]
-    translated_degrees = [_(option) for option in degrees]
-
-    # Age input with intervals
-    selected_age_group_translated = st.selectbox(
-        _(age_group_label),
-        translated_age_groups,
-        index=0,
+    # Selections with unique keys for each dropdown
+    st.session_state.age_group = st.selectbox(
+        _(age_group_label), [_("Select"), _("Under 18"), _("18-24"), _("25-34"),
+        _("35-44"), _("45-54"), _("55-64"), _("65 and older"), _("Prefer not to say")],
+        key="age_group_selectbox"
+    )
+    st.session_state.gender = st.selectbox(
+        _(gender_label), [_("Select"), _("Male"), _("Female"), _("Other"), _("Prefer not to say")],
+        key="gender_selectbox"
+    )
+    st.session_state.highest_degree = st.selectbox(
+        _(degree_label), [_("Select"), _("High School"), _("Bachelor's"),
+        _("Master's"), _("PhD"), _("Other")],
+        key="degree_selectbox"
     )
 
-    # Find the original (untranslated) version
-    st.session_state.age_group = age_groups[translated_age_groups.index(selected_age_group_translated)]
-
-    # Gender selection
-    selected_gender_translated = st.selectbox(
-        _(gender_label),
-        translated_genders,
-        index=0,
-    )
-
-    # Find the original (untranslated) version
-    st.session_state.gender = genders[translated_genders.index(selected_gender_translated)]
-
-    # Highest Degree selection
-    selected_degree_translated = st.selectbox(
-        _(degree_label),
-        translated_degrees,
-        index=0,
-    )
-
-    # Find the original (untranslated) version
-    st.session_state.highest_degree = degrees[translated_degrees.index(selected_degree_translated)]
-
-    # Display the text area for user input
+    # Text area for the user statement
     statement = st.text_area(
         _(
             "**Please describe a concrete concern that you have about the Energy Transition:**"
         ),
-        height=200
+        height=200, key="user_statement_textarea"
     )
 
-    # Create columns for the button and the error message
+    # Columns for submit button and error placeholder
     col1, col2 = st.columns([1.5, 3.6])
-
     with col1:
-        submit_button = st.button(_("Submit Concern"))
+        submit_button = st.button(_("Submit Concern"), key="submit_button")
     with col2:
         error_placeholder = st.empty()
 
-    # Example concerns to be displayed
+    # Example concerns
     example_concerns = [
         _("I'm worried the energy transition will increase electricity bills."),
         _("I'm concerned about blackouts during the transition period."),
@@ -98,18 +80,17 @@ def get_user_statement_and_summary(client):
         _("I feel the transition is moving too fast and disrupting daily life."),
     ]
 
-    # Create an expandable section for example concerns with smaller font size
+    # Expandable section for example concerns
     with st.expander(_("Need inspiration? Click here to see example concerns.")):
         for concern in example_concerns:
             st.markdown(
-                f"<p style='font-size:14px;color:grey;margin-bottom: 10px;'>- {concern}</p>",
+                f"<p style='font-size:14px;color:grey;margin-bottom:10px;'>- {concern}</p>",
                 unsafe_allow_html=True
             )
 
+    # Validation
     min_char_count = 30
     char_count = len(statement)
-
-    # Ensure all fields are filled before submission
     fields_filled = (
         st.session_state.age_group != _("Select")
         and st.session_state.gender != _("Select")
@@ -119,11 +100,9 @@ def get_user_statement_and_summary(client):
 
     if submit_button:
         if not fields_filled:
-            # Display appropriate error message
+            # Error message for incomplete fields
             with col2:
-                error_message = _(
-                    "<div style='color: gray; font-size: 13px; padding: 5px; text-align: center; border-radius: 5px;'>"
-                )
+                error_message = _("<div style='color: red; font-size: 13px;'>")
                 if st.session_state.age_group == _("Select"):
                     error_message += _("Please select your age group.")
                 elif st.session_state.gender == _("Select"):
@@ -132,56 +111,58 @@ def get_user_statement_and_summary(client):
                     error_message += _("Please select your highest degree.")
                 elif char_count < min_char_count:
                     error_message += (
-                        _("Please enter at least ")
-                        + str(min_char_count)
-                        + _(" characters. You currently have: ")
-                        + str(char_count)
-                        + _(" characters.")
+                        _("Please enter at least ") +
+                        str(min_char_count) +
+                        _(" characters. You currently have: ") +
+                        str(char_count) +
+                        _(" characters.")
                     )
                 error_message += "</div>"
                 error_placeholder.markdown(error_message, unsafe_allow_html=True)
         else:
-            # Clear the error message if any
+            # Clear error placeholder
             error_placeholder.empty()
-            if st.session_state.lang == "de":
-                lang_prompt = "Verwende die Deutsche Sprache."
-            else:
-                lang_prompt = "Use the English Language."
 
-            summary_response = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=chatbot_config["general"][
-                    "summary_max_tokens"
-                ],
-                system=lang_prompt
-                + chatbot_config["general"]["summary_role"],
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [{"type": "text", "text": statement}],
-                    }
-                ],
-                temperature=chatbot_config["general"][
-                    "summary_temperature"
-                ],
-            )
-            placeholder.empty()
-            summary = summary_response.content[0].text.strip()
-            
-            insert_db_message(
-                statement, role="user", message_type="initial_statement"
-            )
-            insert_db_message(
-                summary, role="assistant", message_type="initial_statement_summary"
-            )
-            insert_full_conversation_details(st.session_state.age_group,st.session_state.gender,
-                                                st.session_state.highest_degree,st.session_state.consent_given)
+            # Language prompt
+            lang_prompt = "Use the English Language." if st.session_state.lang != "de" else "Verwende die Deutsche Sprache."
 
+            # Call to the Claude API
+            try:
+                summary_response = client.messages.create(
+                    model="claude-3-5-sonnet-20241022",
+                    max_tokens=chatbot_config["general"]["summary_max_tokens"],
+                    system=lang_prompt + chatbot_config["general"]["summary_role"],
+                    messages=[
+                        {"role": "user", "content": [{"type": "text", "text": statement}]}
+                    ],
+                    temperature=chatbot_config["general"]["summary_temperature"],
+                )
+                summary = summary_response.content[0].text.strip()
+            except Exception as e:
+                st.error(f"Failed to generate a summary. Error: {e}")
+                return
+
+            # Store data in session state
             st.session_state.summary = summary
             st.session_state.statement = statement
-            st.session_state.step = "initial_rating"
 
+            # Save details to the database
+            try:
+                insert_db_message(statement, role="user", message_type="initial_statement")
+                insert_db_message(summary, role="assistant", message_type="initial_statement_summary")
+                insert_full_conversation_details(
+                    st.session_state.age_group,
+                    st.session_state.gender,
+                    st.session_state.highest_degree,
+                    st.session_state.consent_given,
+                )
+            except Exception as e:
+                st.error(f"Failed to save data to the database. Error: {e}")
+                return
+
+            # Move to the next step
+            st.session_state.step = "initial_rating"
             st.rerun()
 
+    # Footer
     write_footnote()
-
