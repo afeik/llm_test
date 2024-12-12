@@ -26,7 +26,7 @@ def get_image_path(image_name):
 
 # Function to get API key
 def get_api_key():
-    return st.secrets["claude"]["claude_auth"]
+    #return st.secrets["claude"]["claude_auth"]
     try:
         # Try to get from Google Secret Manager first
         return get_secret("claude_auth")
@@ -44,7 +44,7 @@ def get_api_key():
 
 # Function to get the database URI
 def get_db_uri():
-    return st.secrets["neon_db"]["db_uri"]
+    #return st.secrets["neon_db"]["db_uri"]
     try:
         # Try to get from Google Secret Manager first
         return get_secret("db_uri")
