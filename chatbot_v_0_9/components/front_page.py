@@ -40,7 +40,7 @@ def select_proficiency_level():
     st.session_state.setdefault("conversation_id", None)
 
     # Cache the image loading to reduce latency
-    @st.cache_resource
+    #@st.cache_resource
     def load_image(image_name):
         return Image.open(get_image_path(image_name))
 
