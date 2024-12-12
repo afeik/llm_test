@@ -26,7 +26,7 @@ msgid "Try Again?"
 msgstr "Erneut versuchen?"
 
 #: energy_transition_chatbot_main.py:79
-msgid "<b>Thank you for your valuable contribution to our reasearch project on solar energy!</b>"
+msgid "<b>Thank you for your valuable contribution to our research project on solar energy!</b>"
 msgstr "<b>Vielen Dank für Ihren wertvollen Beitrag zu unserem Forschungsprojekt zum Thema Solarenergie!</b>"
 
 #: components/front_page.py:109
