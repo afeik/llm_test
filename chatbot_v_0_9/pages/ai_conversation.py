@@ -53,7 +53,7 @@ def claude_conversation(client):
                     model="claude-3-5-sonnet-20241022",
                     max_tokens=chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
                     temperature=chatbot_config[st.session_state.proficiency]["conversation_temperature"],
-                    system=f"{lang_prompt} {chatbot_config['general']['general_role']} {chatbot_config[st.session_state.proficiency]['conversation_role']}",
+                    system=f"{lang_prompt} If German, you can use a Swiss Greeting like Grüezi or similar {chatbot_config['general']['general_role']} {chatbot_config[st.session_state.proficiency]['conversation_role']}",
                     messages=[{"role": "user", "content": solar_prompt}],
                 )
 
