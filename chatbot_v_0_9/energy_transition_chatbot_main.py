@@ -2,6 +2,9 @@ import streamlit as st
 import anthropic
 from pathlib import Path
 
+# Set the page configuration at the very top
+st.set_page_config(page_title="Solar Energy Chatbot", page_icon=":robot_face:")
+
 # Import components
 from components.user_ratings import get_initial_rating, get_final_rating
 from components.front_page import select_proficiency_level
@@ -33,7 +36,6 @@ if "consent_given" not in st.session_state:
 if "conversation_id" not in st.session_state:
     st.session_state.conversation_id = None  # Or set a default value like ""
 
-st.set_page_config("Solar Energy Chatbot",":robot_face:")
 # Initialize Claude client
 anthropic_api_key = get_api_key()
 
@@ -42,25 +44,21 @@ if anthropic_api_key:
 else:
     st.error("Connection to Claude API failed.")
 
-
+# Step-based navigation
 if st.session_state.step == "select_proficiency":
     select_proficiency_level()
 
 if st.session_state.step == "initial_statement":
     get_user_statement_and_summary(claude_client)
 
-
 if st.session_state.step == "initial_rating":
     get_initial_rating()
-
 
 if st.session_state.step == "conversation":
     claude_conversation(claude_client)
 
-
 if st.session_state.step == "final_rating":
     get_final_rating()
-
 
 if st.session_state.step == "completed":
     _, col = language_dropdown(ret_cols=True)
@@ -70,7 +68,7 @@ if st.session_state.step == "completed":
                 del st.session_state[key]
             st.rerun()
 
-    st.markdown(_("<b>Thank you for your valuable contribution to our reasearch project on solar energy!</b>"), unsafe_allow_html=True)
+    st.markdown(_("<b>Thank you for your valuable contribution to our research project on solar energy!</b>"), unsafe_allow_html=True)
     st.write(_("If you have further questions, contact us:"))
     st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
     st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")
