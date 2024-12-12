@@ -2,6 +2,9 @@ import streamlit as st
 from components.footnote import write_footnote
 from components.utils import language_dropdown, get_api_key
 
+if "page_set" not in st.session_state:
+    # If not, set it to the main page and reload
+    st.switch_page("energy_transition_chatbot_main.py")
 st.set_page_config("Solar Energy Chatbot",":robot_face:")
 lang = st.session_state.lang
 _, col = language_dropdown(lang,ret_cols=True)

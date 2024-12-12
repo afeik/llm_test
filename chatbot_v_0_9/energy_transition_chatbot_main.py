@@ -7,6 +7,13 @@ import anthropic
 from pathlib import Path
 from components.utils import language_dropdown, get_api_key
 
+
+
+# Check if the 'page' parameter exists
+if "page_set" not in st.session_state:
+    # If not, set it to the main page and reload
+    st.session_state.page_set = "front_page"
+
 st.set_page_config("Solar Energy Chatbot",":robot_face:")
 # Initialize session state
 if "lang" not in st.session_state:

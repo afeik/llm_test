@@ -80,6 +80,10 @@ def get_final_rating():
     user to rate their confidence after discussing it. Submits the rating 
     to the database and completes the conversation.
     """
+    if "page_set" not in st.session_state:
+    # If not, set it to the main page and reload
+        st.switch_page("energy_transition_chatbot_main.py")
+
     lang = st.session_state.lang
     _ = language_dropdown(lang)
     

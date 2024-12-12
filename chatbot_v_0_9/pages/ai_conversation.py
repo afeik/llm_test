@@ -6,6 +6,11 @@ from components.db_communication import insert_db_message
 st.set_page_config("Solar Energy Chatbot",":robot_face:")
 chatbot_config = get_chatbot_config()
 
+
+if "page_set" not in st.session_state:
+    # If not, set it to the main page and reload
+    st.switch_page("energy_transition_chatbot_main.py")
+
 def claude_conversation(client):
     """
     Facilitates a conversational interface with Claude, a chatbot model, 
