@@ -1,10 +1,12 @@
 import streamlit as st
-from .footnote import write_footnote
-from .utils import language_dropdown, get_chatbot_config
-from .db_communication import insert_final_rating, insert_initial_rating
+from components.footnote import write_footnote
+from components.utils import language_dropdown, get_chatbot_config
+from components.db_communication import insert_final_rating, insert_initial_rating
+st.set_page_config("Solar Energy Chatbot",":robot_face:")
 
 # Obtain Config
 chatbot_config = get_chatbot_config() 
+
 
 def get_initial_rating():
     """
@@ -14,7 +16,8 @@ def get_initial_rating():
     summarized statement based on their initial input. Submits the rating to 
     the database and advances the conversation step.
     """
-    _ = language_dropdown()
+    lang = st.session_state.lang
+    _ = language_dropdown(lang)
 
     placeholder = st.empty()
 
@@ -61,6 +64,7 @@ def get_initial_rating():
                     st.session_state["initial_rating_submitted"] = True
                     st.session_state.initial_rating = st.session_state.initial_rating_slider
                     st.session_state.step = "conversation"
+                    #st.switch_page("./pages/final_page.py")
                     placeholder.empty()
                     st.rerun()
 
@@ -76,8 +80,9 @@ def get_final_rating():
     user to rate their confidence after discussing it. Submits the rating 
     to the database and completes the conversation.
     """
-    _ = language_dropdown()
-
+    lang = st.session_state.lang
+    _ = language_dropdown(lang)
+    
     #st.markdown(_("<b>How helpful was this conversation regarding your questions or your general understanding of solar energy technologies?</b>"),unsafe_allow_html=True)
     st.markdown(chatbot_config['solar_ownership'][st.session_state.solar_panel_ownership]['final_rating'][st.session_state.lang],unsafe_allow_html=True)
     #st.markdown(f"> *{st.session_state.summary}*")
@@ -99,7 +104,10 @@ def get_final_rating():
             insert_final_rating(st.session_state.final_rating_slider)
             st.session_state["final_rating_submitted"] = True
             st.session_state.final_rating = st.session_state.final_rating_slider
-            st.session_state.step = "completed"
+            #st.session_state.step = "completed"
+            st.switch_page("./pages/final_page.py")
             st.rerun()
 
     write_footnote(short_version=False)
+
+get_final_rating()

@@ -1,8 +1,9 @@
 import streamlit as st
-from .utils import stream_data, get_chatbot_config, language_dropdown
-from .footnote import write_footnote
-from .db_communication import insert_db_message
+from components.utils import stream_data, get_chatbot_config, language_dropdown
+from components.footnote import write_footnote
+from components.db_communication import insert_db_message
 
+st.set_page_config("Solar Energy Chatbot",":robot_face:")
 chatbot_config = get_chatbot_config()
 
 def claude_conversation(client):
@@ -18,10 +19,12 @@ def claude_conversation(client):
     """
 
     # Language selection and "End Conversation" button in top right
-    _, col = language_dropdown(ret_cols=True)
+    lang = st.session_state.lang
+    _, col = language_dropdown(lang,ret_cols=True)
     with col:
         if st.button(_("Provide Final Feedback"), key="end_conversation"):
-            st.session_state.step = "final_rating"
+            st.switch_page("./pages/user_ratings.py")
+            #st.session_state.step = "final_rating"
             st.rerun()
 
     # Set disclaimer based on language
@@ -41,7 +44,7 @@ def claude_conversation(client):
     )
 
     # Main conversation container (similar to original code)
-    with st.container(height=730, border=False):
+    with st.container(height=630, border=False):
         # If it's the first turn, get initial clarification from Claude
         if st.session_state.conversation_turns == 0 and "initial_clarification_sent" not in st.session_state:
             with st.spinner(_("Preparing your conversation ...")):
@@ -61,7 +64,7 @@ def claude_conversation(client):
             insert_db_message(initial_clarification, role="assistant", message_type="conversation")
 
         # Container for displaying messages, similar dimensions as original
-        disp_messages = st.container(height=620,border=False)
+        disp_messages = st.container(height=520,border=False)
         with disp_messages:
             for message in st.session_state.messages:
                 with st.chat_message(message["role"]):
@@ -117,3 +120,5 @@ def claude_conversation(client):
 
     # Footnote at the bottom of the page, outside the main conversation container
     write_footnote(short_version=False)
+
+claude_conversation(st.session_state.claude_client)

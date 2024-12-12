@@ -7,7 +7,6 @@ from pathlib import Path
 import gettext
 from google.cloud import secretmanager
 
-
 # Function to access secrets from Google Secret Manager
 def get_secret(secret_name):
     try:
@@ -136,11 +135,9 @@ def set_background_local(image_file):
         unsafe_allow_html=True
     )
 
-
-def language_dropdown(ret_cols=False): 
+def language_dropdown(lang, ret_cols=False):
     # Directory for language files
-    
-    locale_dir = st.session_state.locale_dir
+    locale_dir = st.session_state.get("locale_dir", "locales")  # Default directory
 
     # Map language codes to display names
     languages = {
@@ -150,20 +147,21 @@ def language_dropdown(ret_cols=False):
 
     # Streamlit Layout: Use columns to place the dropdown on the right
     if ret_cols is False:
-        col1, col2, col3 = st.columns([6,3,1.8])  # Adjust column ratios for layout control
-
+        col1, col2, col3 = st.columns([6, 3, 1.8])  # Adjust column ratios for layout control
         with col3:
-            selected_language = st.selectbox(" ", list(languages.values()), label_visibility="collapsed")
+            selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
     else:
-        col1, col2, col3 = st.columns([5,1.8,3.5])
-        with col2: 
-            selected_language = st.selectbox(" ", list(languages.values()), label_visibility="collapsed")
-    
+        col1, col2, col3 = st.columns([5, 1.8, 3.5])
+        with col2:
+            selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
+
     # Get the corresponding locale code
     current_lang = [code for code, name in languages.items() if name == selected_language][0]
 
-    # Store selected language in session state
-    st.session_state.lang = current_lang
+    # Update the session state with the selected language
+    if st.session_state.lang != current_lang:
+        st.session_state.lang = current_lang
+        st.rerun()  # Trigger a rerun to apply the new language immediately
 
     # Load the corresponding translation
     lang = gettext.translation("messages", localedir=locale_dir, languages=[current_lang], fallback=True)
@@ -172,5 +170,6 @@ def language_dropdown(ret_cols=False):
 
     if ret_cols:
         return _, col3
-    else: 
+    else:
         return _
+

@@ -1,8 +1,9 @@
 import streamlit as st
-from .footnote import write_footnote
-from .db_communication import insert_db_message, insert_full_conversation_details
-from .utils import get_chatbot_config, language_dropdown
+from components.footnote import write_footnote
+from components.db_communication import insert_db_message, insert_full_conversation_details
+from components.utils import get_chatbot_config, language_dropdown
 
+st.set_page_config("Solar Energy Chatbot",":robot_face:")
 chatbot_config = get_chatbot_config()
 
 def get_user_statement_and_summary(client):
@@ -10,7 +11,8 @@ def get_user_statement_and_summary(client):
     Collects a user statement, generates a summary using the Claude API,
     and displays the summary for user confirmation, along with additional mandatory user details.
     """
-    _ = language_dropdown()
+    lang = st.session_state.lang
+    _ = language_dropdown(lang)
     lang = st.session_state.lang
 
     # Load titles and concerns from the configuration file
