@@ -70,7 +70,7 @@ if st.session_state.step == "completed":
                 del st.session_state[key]
             st.rerun()
 
-    st.markdown(_("<h4>Thank you for participating!</h4>"), unsafe_allow_html=True)
+    st.markdown(_("<b>Thank you for your valuable contribution to our reasearch project on solar energy!</b>"), unsafe_allow_html=True)
     st.write(_("If you have further questions, contact us:"))
     st.write("Dr. Mengshuo Jia (PSL - ETH Zürich) jia@eeh.ee.ethz.ch")
     st.write("Benjamin Sawicki (NCCR Automation) bsawicki@ethz.ch")

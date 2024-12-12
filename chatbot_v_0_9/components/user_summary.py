@@ -20,9 +20,9 @@ def get_user_statement_and_summary(client):
 
     # Initialize session state variables
     default_states = {
-        "age_group": "Select",
-        "gender": "Select",
-        "highest_degree": "Select",
+        #"age_group": "Select",
+        #"gender": "Select",
+        #"highest_degree": "Select",
         "lang": lang,
         "summary": None,
         "statement": None,
@@ -35,20 +35,29 @@ def get_user_statement_and_summary(client):
     # Page title
     st.markdown(f"<h4>{page_title}</h4>", unsafe_allow_html=True)
 
-    # Dropdown options
-    age_group_label = _("Age Group:")
-    gender_label = _("Gender:")
-    degree_label = _("Highest Degree Achieved:")
-    age_groups = [
-        _("Select"), _("Under 18"), _("18-24"), _("25-34"),
-        _("35-44"), _("45-54"), _("55-64"), _("65 and older"), _("Prefer not to say")
-    ]
-    genders = [_("Select"), _("Male"), _("Female"), _("Other"), _("Prefer not to say")]
-    degrees = [_("Select"), _("High School"), _("Bachelor's"), _("Master's"), _("PhD"), _("Other")]
+    # # Dropdown options
+    # age_group_label = _("Age Group:")
+    # gender_label = _("Gender:")
+    # degree_label = _("Highest Degree Achieved:")
+    # age_groups = [
+    #     _("Select"), _("Under 18"), _("18-24"), _("25-34"),
+    #     _("35-44"), _("45-54"), _("55-64"), _("65 and older"), _("Prefer not to say")
+    # ]
+    # genders = [_("Select"), _("Male"), _("Female"), _("Other"), _("Prefer not to say")]
+    # degrees = [_("Select"), _("High School"), _("Bachelor's"), _("Master's"), _("PhD"), _("Other")]
 
-    st.session_state.age_group = st.selectbox(age_group_label, age_groups, key="age_group_selectbox")
-    st.session_state.gender = st.selectbox(gender_label, genders, key="gender_selectbox")
-    st.session_state.highest_degree = st.selectbox(degree_label, degrees, key="degree_selectbox")
+    # st.session_state.age_group = st.selectbox(age_group_label, age_groups, key="age_group_selectbox")
+    # st.session_state.gender = st.selectbox(gender_label, genders, key="gender_selectbox")
+    # st.session_state.highest_degree = st.selectbox(degree_label, degrees, key="degree_selectbox")
+    
+    if "age_group" not in st.session_state:
+        st.session_state.age_group = None
+
+    if "gender" not in st.session_state:
+        st.session_state.gender = None
+        
+    if "highest_degree" not in st.session_state: 
+        st.session_state.highest_degree = None
 
     # Text area for the user statement
     statement = st.text_area(
@@ -73,10 +82,10 @@ def get_user_statement_and_summary(client):
     min_char_count = 30
     char_count = len(statement)
     fields_filled = (
-        st.session_state.age_group != _("Select")
-        and st.session_state.gender != _("Select")
-        and st.session_state.highest_degree != _("Select")
-        and char_count >= min_char_count
+        #st.session_state.age_group != _("Select")
+        #and st.session_state.gender != _("Select")
+        #and st.session_state.highest_degree != _("Select") and
+        char_count >= min_char_count
     )
 
     if submit_button:
@@ -84,13 +93,13 @@ def get_user_statement_and_summary(client):
             # Error message for incomplete fields
             with col2:
                 error_message = "<div style='color: red; font-size: 13px;'>"
-                if st.session_state.age_group == _("Select"):
-                    error_message += _("Please select your age group.")
-                elif st.session_state.gender == _("Select"):
-                    error_message += _("Please select your gender.")
-                elif st.session_state.highest_degree == _("Select"):
-                    error_message += _("Please select your highest degree.")
-                elif char_count < min_char_count:
+                # if st.session_state.age_group == _("Select"):
+                #     error_message += _("Please select your age group.")
+                # elif st.session_state.gender == _("Select"):
+                #     error_message += _("Please select your gender.")
+                # elif st.session_state.highest_degree == _("Select"):
+                #     error_message += _("Please select your highest degree.")
+                if char_count < min_char_count:
                     error_message += (
                         _("Please enter at least ") +
                         str(min_char_count) +

@@ -174,3 +174,33 @@ def insert_feedback(feedback_text, rating):
         #st.error(f"Database error during feedback insertion: {e}")
     finally:
         session.close()
+
+
+
+def insert_usecase_specific_info(usecase_specific_info):
+    """
+    Insert usecase specific information into the database for the current conversation.
+
+    Args:
+        usecase_specific_info (dict): The use case specific information to be inserted (as a JSON object).
+    """
+    if "conversation_id" not in st.session_state:
+        st.error("No active conversation. Please ensure a conversation is initialized.")
+        return
+
+    session = Session()
+    try:
+        # Update the existing conversation with the usecase specific information
+        session.execute(
+            update(conversations).where(
+                conversations.c.conversation_id == st.session_state.conversation_id
+            ).values(
+                usecase_specific_info=usecase_specific_info  # Insert the JSON data
+            )
+        )
+        session.commit()
+    except SQLAlchemyError as e:
+        session.rollback()
+        st.error(f"Database error during usecase specific info insertion: {e}")
+    finally:
+        session.close()

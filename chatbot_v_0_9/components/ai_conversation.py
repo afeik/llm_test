@@ -1,91 +1,73 @@
 import streamlit as st
-from .utils import stream_data, get_chatbot_config,language_dropdown
+from .utils import stream_data, get_chatbot_config, language_dropdown
 from .footnote import write_footnote
 from .db_communication import insert_db_message
 
 chatbot_config = get_chatbot_config()
 
-
-# Step 3: Conduct Clarifying Conversation with Claude
 def claude_conversation(client):
     """
     Facilitates a conversational interface with Claude, a chatbot model, 
     to discuss the topic of the Energy Transition interactively with the user.
-
-    This function initiates and manages a chat-style conversation where the user 
-    and Claude can exchange messages. The conversation is displayed within a Streamlit 
-    interface, and user interactions are logged to a database.
 
     Parameters:
     ----------
     client : object
         An instance of the Claude client for sending and receiving messages from 
         the Claude chatbot model.
-
-    Workflow:
-    ---------
-    - Sets up the conversation layout, including a top bar with an "End Conversation" button.
-    - Initializes the conversation by prompting Claude for an initial clarification 
-      based on a user-provided statement.
-    - Displays all previous messages in the conversation, including both user and 
-      assistant responses, and appends new messages as they occur.
-    - Processes user input from a chat-style input box:
-        - Sends the user's message to the Claude model.
-        - Appends the response from Claude to the conversation display and database.
-    - Handles the conversation's end by switching to the final rating state.
     """
-    _, col = language_dropdown(ret_cols = True)
-    # Add end conversation button in the upper right corner
-    with col: 
-        if st.button(_("End Conversation"), key="end_conversation"):
+
+    # Language selection and "End Conversation" button in top right
+    _, col = language_dropdown(ret_cols=True)
+    with col:
+        if st.button(_("Provide Final Feedback"), key="end_conversation"):
             st.session_state.step = "final_rating"
             st.rerun()
-    
-    if st.session_state.lang == "de":
-        disclaimer = chatbot_config["disclaimer_de"]
-    else:
-        disclaimer = chatbot_config["disclaimer_en"]
 
-    # Top bar with "End Conversation" button aligned to the top right
-    with st.container(height=720, border=False):
+    # Set disclaimer based on language
+    disclaimer = chatbot_config["disclaimer_de"] if st.session_state.lang == "de" else chatbot_config["disclaimer_en"]
 
-        # Initialize conversation and track message turns
-        if "conversation_turns" not in st.session_state:
-            st.session_state.conversation_turns = 0
-            st.session_state.messages = []
-        if st.session_state.lang == "de":
-            lang_prompt = "Verwende die Deutsche Sprache."
-        else: 
-            lang_prompt = "Use the English Language"
+    # Initialize session state variables
+    if "conversation_turns" not in st.session_state:
+        st.session_state.conversation_turns = 0
+        st.session_state.messages = []
 
-        # Start the conversation with a clarification prompt if it's the first turn
+    # Determine language prompt and solar prompt
+    lang_prompt = "Verwende die Deutsche Sprache." if st.session_state.lang == "de" else "Use the English Language."
+    solar_prompt = (
+        f"Solar Ownership: {st.session_state.solar_panel_ownership}. "
+        f"Based on this, emphasize these questions (concise and not all at once): "
+        f"{chatbot_config['solar_ownership'][st.session_state.solar_panel_ownership]['questions']}"
+    )
+
+    # Main conversation container (similar to original code)
+    with st.container(height=730, border=False):
+        # If it's the first turn, get initial clarification from Claude
         if st.session_state.conversation_turns == 0 and "initial_clarification_sent" not in st.session_state:
-            
-            initial_clarification_prompt = f"Please initiate a clarifying conversation with the user; Use max one sentence: {st.session_state.statement}"
-            initial_clarification_response = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
-                temperature=chatbot_config[st.session_state.proficiency]["conversation_temperature"],
-                system = lang_prompt + chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
-                messages=[{"role": "user", "content": [{"type": "text", "text": initial_clarification_prompt}]}],
-            )
-            
+            with st.spinner(_("Preparing your conversation ...")):
+                initial_clarification_response = client.messages.create(
+                    model="claude-3-5-sonnet-20241022",
+                    max_tokens=chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
+                    temperature=chatbot_config[st.session_state.proficiency]["conversation_temperature"],
+                    system=f"{lang_prompt} {chatbot_config['general']['general_role']} {chatbot_config[st.session_state.proficiency]['conversation_role']}",
+                    messages=[{"role": "user", "content": solar_prompt}],
+                )
+
             initial_clarification = initial_clarification_response.content[0].text.strip()
             st.session_state.messages.append({"role": "assistant", "content": initial_clarification})
             st.session_state.initial_clarification_sent = True
-            
-            # Insert to DB 
-            insert_db_message(initial_clarification, role = "assistant", message_type = "initial_clarification")
 
+            # Insert initial clarification to DB
+            insert_db_message(initial_clarification, role="assistant", message_type="conversation")
+
+        # Container for displaying messages, similar dimensions as original
         disp_messages = st.container(height=620,border=False)
-
-       # Display chat messages in sequence
         with disp_messages:
             for message in st.session_state.messages:
                 with st.chat_message(message["role"]):
                     st.write(message["content"])
 
-
+        # Display disclaimer below messages, just like in the original code
         st.markdown(
             f"""
             <div style='color: gray; font-size: 13px'>
@@ -93,47 +75,45 @@ def claude_conversation(client):
             </div>
             """,
             unsafe_allow_html=True
-        )        # User input at the bottom of the chat
-        prompt = st.chat_input(_("Your response:"))
+        )
 
-
-        if prompt:
+        # User input at the bottom
+        user_input = st.chat_input(_("Your response:"))
+        if user_input:
+            # Display user input
             with disp_messages:
                 with st.chat_message("user"):
-                    st.write_stream(stream_data(prompt))
-            
-            # Write message to database
-            insert_db_message(prompt, role="user", message_type = "conversation")
-            
-            # Insert user input to session - state messages 
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            # Include all previous messages as context for the model
-            all_prev_messages = ["assistant:" + st.session_state.summary] + [
-                f"{msg['role']}:{msg['content']}" for msg in st.session_state.messages
-            ]
-            # Claude Query
-            message = client.messages.create(
+                    st.write_stream(stream_data(user_input))
+
+            # Insert user's message into DB
+            insert_db_message(user_input, role="user", message_type="conversation")
+            st.session_state.messages.append({"role": "user", "content": user_input})
+
+            # Prepare context for Claude
+            context_messages = [f"{msg['role']}: {msg['content']}" for msg in st.session_state.messages]
+
+            # Get Claude's response
+            response = client.messages.create(
                 model="claude-3-5-sonnet-20241022",
-                max_tokens= chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
-                temperature= chatbot_config[st.session_state.proficiency]["conversation_temperature"],
-                system = lang_prompt + chatbot_config["general"]["general_role"]  + chatbot_config[st.session_state.proficiency]["conversation_role"],
+                max_tokens=chatbot_config[st.session_state.proficiency]["conversation_max_tokens"],
+                temperature=chatbot_config[st.session_state.proficiency]["conversation_temperature"],
+                system=f"{lang_prompt} {chatbot_config['general']['general_role']} {chatbot_config[st.session_state.proficiency]['conversation_role']} {solar_prompt}",
                 messages=[
-                    {"role": "assistant", "content": str(all_prev_messages)},
-                    {"role": "user", "content": prompt}
-                ]
+                    {"role": "assistant", "content": "\n".join(context_messages)},
+                    {"role": "user", "content": user_input},
+                ],
             )
 
-            response_text = message.content[0].text
-            # Insert Claude Response to Database 
-            insert_db_message(response_text, role = "assistant", message_type = "conversation")
+            response_text = response.content[0].text.strip()
+            insert_db_message(response_text, role="assistant", message_type="conversation")
 
-            # Write out Claude Response
+            # Display Claude's response
             with disp_messages:
                 with st.chat_message("assistant"):
                     st.write_stream(stream_data(response_text))
 
-            st.session_state.messages.append({"role": "assistant", "content": response_text})  
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
             st.session_state.conversation_turns += 1
 
+    # Footnote at the bottom of the page, outside the main conversation container
     write_footnote(short_version=False)

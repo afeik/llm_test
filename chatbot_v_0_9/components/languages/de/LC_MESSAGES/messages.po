@@ -26,8 +26,16 @@ msgid "Try Again?"
 msgstr "Erneut versuchen?"
 
 #: energy_transition_chatbot_main.py:79
-msgid "<h4>Thank you for participating!</h4>"
-msgstr "<h4>Vielen Dank für die Teilnahme an der Konversation!</h4>"
+msgid "<b>Thank you for your valuable contribution to our reasearch project on solar energy!</b>"
+msgstr "<b>Vielen Dank für Ihren wertvollen Betrag zu unserem Forschungsprojekt zum Thema Solarenergie!</b>"
+
+#: components/front_page.py:109
+msgid "I do not own a Solar System"
+msgstr "Ich besitze noch keine Solaranlage"
+
+#: components/front_page.py:83
+msgid "I already own a Solar System"
+msgstr "Ich besitze bereits eine Solaranlage"
 
 #: components/front_page.py:26
 msgid "<h3>Welcome to the Energy Transition Chatbot!</h3>"
@@ -52,12 +60,16 @@ msgstr "Chatbot Starten"
 
 
 #: components/ai_conversation.py:40
-msgid "End Conversation"
-msgstr "Gespräch beenden"
+msgid "Provide Final Feedback"
+msgstr "Finales Feedback abgeben"
 
 #: components/ai_conversation.py:97
 msgid "Your response:"
 msgstr "Ihre Antwort:"
+
+#: components/ai_conversation.py:97
+msgid "Preparing your conversation ..."
+msgstr "Ihre Konversation wird vorbereitet ..."
 
 #: components/user_ratings.py:23
 msgid "<h4>AI Summary of your concern:</h4>"
@@ -72,18 +84,18 @@ msgid "Submit Initial Rating"
 msgstr "Erste Bewertung abgeben"
 
 #: components/user_ratings.py:81
-msgid "<h4>Your initial concern was summarized as:</h4>"
-msgstr "<h4>Ihr ursprüngliches Anliegen wurde wie folgt zusammengefasst:</h4>"
+msgid "<b>How helpful was this conversation regarding solar energy? </b>"
+msgstr "<b>Wie hilfreich war diese Konversation rund um die Solarenergie für Sie?</b>"
 
 #: components/user_ratings.py:95
 msgid ""
-"After discussing, how confident are you now that this statement is correct?"
+"How helpful was this conversation regarding your questions or your general understanding of solar energy technologies?"
 msgstr ""
-"Nach der Diskussion, wie sicher sind Sie jetzt, dass diese Aussage korrekt ist?"
+"Wie hilfreich war diese Konversation für Ihre Fragen oder Ihr Verständnis rund um die Solarenergie?"
 
 #: components/user_ratings.py:96
 msgid "Submit Final Rating"
-msgstr "Endgültige Bewertung abgeben"
+msgstr "Finale Bewertung abgeben"
 
 #: components/user_summary.py:17
 msgid "<h4>Switzerland's Energy Transition</h4>"

@@ -78,8 +78,9 @@ def get_final_rating():
     """
     _ = language_dropdown()
 
-    st.markdown(_("<h4>Your initial concern was summarized as:</h4>"),unsafe_allow_html=True)
-    st.markdown(f"> *{st.session_state.summary}*")
+    #st.markdown(_("<b>How helpful was this conversation regarding your questions or your general understanding of solar energy technologies?</b>"),unsafe_allow_html=True)
+    st.markdown(chatbot_config['solar_ownership'][st.session_state.solar_panel_ownership]['final_rating'][st.session_state.lang],unsafe_allow_html=True)
+    #st.markdown(f"> *{st.session_state.summary}*")
     #st.divider()
 
     # Ensure rating state is properly initialized
@@ -92,7 +93,7 @@ def get_final_rating():
             0, 100,
             key="final_rating_slider"
         )
-        st.write(_("After discussing, how confident are you now that this statement is correct?"))
+        #st.write(_("How helpful was this conversation regarding your questions or your general understanding of solar energy technologies?"))
         if st.button(_("Submit Final Rating"), key="submit_final_rating"):
             #send_ga_event("final_rating")
             insert_final_rating(st.session_state.final_rating_slider)

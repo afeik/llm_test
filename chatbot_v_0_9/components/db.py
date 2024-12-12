@@ -1,7 +1,7 @@
 # db.py
 
 from datetime import datetime
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey, JSON
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import QueuePool
 from .utils import get_db_uri
@@ -43,7 +43,8 @@ conversations = Table(
     Column('age_group', String(50)), # User's age group
     Column('gender', String(20)), # User's gender
     Column('highest_degree', String(50)), # User's highest degree
-    Column('consent_given', Boolean, nullable=False, default=False) # Whether consent is given
+    Column('consent_given', Boolean, nullable=False, default=False), # Whether consent is given
+    Column('usecase_specific_info', JSON)  # New column for JSON data
 )
 
 # Define the messages table
