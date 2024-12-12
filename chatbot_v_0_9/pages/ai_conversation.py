@@ -41,6 +41,7 @@ def claude_conversation(client):
         f"Solar Ownership: {st.session_state.solar_panel_ownership}. "
         f"Based on this, emphasize these questions (concise and not all at once): "
         f"{chatbot_config['solar_ownership'][st.session_state.solar_panel_ownership]['questions']}"
+        f"User Proficiency Level: {st.session_state.proficiency}"
     )
 
     # Main conversation container (similar to original code)
