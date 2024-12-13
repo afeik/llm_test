@@ -141,17 +141,17 @@ def language_dropdown(lang, ret_cols=False):
 
     # Map language codes to display names
     languages = {
-        "de": "DE 🇨🇭",
-        "en": "EN 🇬🇧",
+        "de": "Deutsch 🇨🇭",
+        "en": "English 🇬🇧",
     }
 
     # Streamlit Layout: Use columns to place the dropdown on the right
     if ret_cols is False:
-        col1, col2, col3 = st.columns([6, 3, 1.8])  # Adjust column ratios for layout control
+        col1, col2, col3 = st.columns([6, 3, 2.5])  # Adjust column ratios for layout control
         with col3:
             selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
     else:
-        col1, col2, col3 = st.columns([5, 1.8, 3.5])
+        col1, col2, col3 = st.columns([5, 2.3, 3.5])
         with col2:
             selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
 
