@@ -141,7 +141,7 @@ def language_dropdown(lang, ret_cols=False):
 
     # Map language codes to display names
     languages = {
-        "de": "DE 🇩🇪",
+        "de": "DE 🇨🇭",
         "en": "EN 🇬🇧",
     }
 
