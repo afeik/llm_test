@@ -71,7 +71,7 @@ def claude_conversation(client):
                     if st.session_state.lang == "de":
                         st.session_state.messages.append({"role": "assistant", "content": "Ich danke Ihnen für das Feedback - Gerne stehe ich noch für weitere Fragen zur Verfügung!"})
                     else: 
-                        st.session_state.messages.append({"role": "assistant", "content": "Thank you for your feedback - I am happy to answer any other questions you might have!"})
+                        st.session_state.messages.append({"role": "assistant", "content": "Thank you for your feedback - I am happy to answer any further questions you might have!"})
                     st.rerun()
 
             # If feedback has been submitted, show thank you message
