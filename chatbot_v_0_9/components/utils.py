@@ -151,7 +151,7 @@ def language_dropdown(lang, ret_cols=False):
         with col3:
             selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
     else:
-        col1, col2, col3 = st.columns([5, 2.3, 3.5])
+        col1, col2, col3 = st.columns([7.9, 2.8, 4])
         with col2:
             selected_language = st.selectbox(" ", list(languages.values()), index=list(languages.keys()).index(lang), label_visibility="collapsed")
 

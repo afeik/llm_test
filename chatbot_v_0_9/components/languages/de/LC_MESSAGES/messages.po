@@ -67,6 +67,19 @@ msgstr "Finales Feedback abgeben"
 msgid "Your response:"
 msgstr "Ihre Antwort:"
 
+#: pages/ai_conversation.py:100
+msgid "Done? Click here to continue."
+msgstr "Erledigt? Klicken Sie hier."
+
+#: pages/ai_conversation.py:100
+msgid "We value your feedback!"
+msgstr "Wir schätzen Ihr Feedback!"
+
+#: pages/ai_conversation.py:100
+msgid "Start a new conversation?"
+msgstr "Neue Konversation starten?"
+
+
 #: pages/ai_conversation.py:97
 msgid "Preparing your conversation ..."
 msgstr "Ihre Konversation wird vorbereitet ..."
@@ -206,8 +219,8 @@ msgid "Please enter your feedback."
 msgstr "Geben Sie bitte ihr Feedback ein."
 
 #: components/db_communiation.py:171
-msgid "Thank you for your feedback!"
-msgstr "Vielen Dank für Ihr Feedback!"
+msgid "Feedback successfully submitted."
+msgstr "Feedback erfolgreich abgesendet."
 
 #: pages/user_summary.py:64
 msgid "Submit Statement"

@@ -6,7 +6,7 @@ import time
 
 chatbot_config = get_chatbot_config() 
 
-@st.dialog("Impressum")
+@st.dialog("Impressum", width="large")
 def show_impressum():
     """
     Displays the Impressum content in a dialog box by loading 
@@ -32,7 +32,7 @@ def show_impressum():
         markdown_content = file.read()
     st.markdown(markdown_content)
 
-@st.dialog("💬 Feedback")
+@st.dialog("💬 Feedback", width="large")
 def show_feedback_popup():
     """
     Displays a feedback form with a star rating and text feedback input.

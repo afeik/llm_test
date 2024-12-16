@@ -142,7 +142,7 @@ def insert_full_conversation_details(age_group, gender, highest_degree, consent_
         session.close()
 
 
-def insert_feedback(feedback_text, rating):
+def insert_feedback(feedback_text, rating=None):
     """
     Insert feedback into the feedback table.
     
@@ -159,16 +159,26 @@ def insert_feedback(feedback_text, rating):
 
     session = Session()
     try:
-        session.execute(
-            insert(feedback).values(
-                conversation_id=st.session_state.conversation_id,  # Link feedback to the active conversation
-                feedback_text=feedback_text,
-                rating=rating,
-                timestamp=datetime.now()
+        if rating is not None:
+            session.execute(
+                insert(feedback).values(
+                    conversation_id=st.session_state.conversation_id,  # Link feedback to the active conversation
+                    feedback_text=feedback_text,
+                    rating=rating,
+                    timestamp=datetime.now()
+                )
             )
-        )
+        else: 
+                session.execute(
+                insert(feedback).values(
+                    conversation_id=st.session_state.conversation_id,  # Link feedback to the active conversation
+                    feedback_text=feedback_text,
+                    timestamp=datetime.now()
+                )
+            )
+            
         session.commit()
-        st.success(_("Thank you for your feedback!"))
+        st.success(_("Feedback successfully submitted."))
     except SQLAlchemyError as e:
         session.rollback()
         #st.error(f"Database error during feedback insertion: {e}")

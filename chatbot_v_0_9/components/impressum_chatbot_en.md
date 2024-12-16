@@ -1,4 +1,3 @@
-
 ### Research Project on the Energy Transition in Switzerland at ETH Zurich
 ---
 

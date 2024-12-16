@@ -1,7 +1,7 @@
 # db.py
 
 from datetime import datetime
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey, JSON
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, Text, TIMESTAMP, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import QueuePool
 from .utils import get_db_uri
@@ -19,15 +19,6 @@ if 'sslmode' not in db_uri:
         db_uri += '?sslmode=require'
 
 # Initialize Metadata and Database Tables
-metadata = MetaData()
-
-from sqlalchemy import (
-    Table, Column, Integer, String, Text, TIMESTAMP, Boolean, create_engine, MetaData
-)
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.pool import QueuePool
-from datetime import datetime
-
 metadata = MetaData()
 
 # Define the conversations table
@@ -68,7 +59,6 @@ feedback = Table(
     Column('timestamp', TIMESTAMP, default=datetime.now, nullable=False)  # Feedback submission time
 )
 
-
 # Initialize Database Engine and Session Factory
 engine = create_engine(
     db_uri,
@@ -76,8 +66,8 @@ engine = create_engine(
     poolclass=QueuePool,
     pool_size=5,
     max_overflow=10,
-    pool_timeout=1000,
-    pool_recycle=1800,  # Recycle connections every 30 minutes
+    pool_timeout=3600*24,
+    pool_recycle=3600*24,  # Recycle connections every 30 minutes
     pool_pre_ping=True
 )
 # Create all tables in the database
