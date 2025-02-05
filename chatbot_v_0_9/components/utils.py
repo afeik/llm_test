@@ -11,7 +11,7 @@ from google.cloud import secretmanager
 def get_secret(secret_name):
     try:
         client = secretmanager.SecretManagerServiceClient()
-        name = f"projects/eth-solar-chatbot/secrets/{secret_name}/versions/latest"
+        name = f"projects/362729209405/secrets/{secret_name}/versions/latest"
         response = client.access_secret_version(name=name)
         return response.payload.data.decode("UTF-8")
     except Exception as e:
